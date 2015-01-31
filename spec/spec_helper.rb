@@ -35,6 +35,13 @@ Spork.prefork do
     config.filter_run :focus
     config.run_all_when_everything_filtered = false
     config.order = :random
+
+    config.before(:suite) do
+      DatabaseCleaner.start
+    end
+    config.before(:each) do
+      DatabaseCleaner.clean
+    end
     # Print the 10 slowest examples and example groups at the
     # end of the spec run, to help surface which specs are running
     # particularly slow.
