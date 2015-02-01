@@ -28,6 +28,7 @@ group :test, :development do
   gem 'guard-rspec', require: false
   gem 'guard-spork'
   gem 'sqlite3'
+  gem 'shoulda'
 end
 group :production do
   gem 'pg'
