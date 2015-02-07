@@ -35,4 +35,26 @@ class UserTest < ActiveSupport::TestCase
       create(:user, access_token: double_token)
     end
   end
+  test "user authorizes by access token" do
+    user = create(:user)
+    access_token = user.access_token
+    assert User.authorize_by(access_token: access_token)
+  end
+  test "regenerate access token after successful authorization" do
+    user = create(:user)
+    access_token = user.access_token
+    assert_equal user, User.authorize_by(access_token: access_token)
+    user.reload
+    assert_not_equal access_token, user.access_token, "acces token must regenerate after successful authrorization"
+  end
+  test "user authorizes by provider and auth_token" do
+    user = create(:user)
+    authentication = create(:authentication, provider: 'facebook', user_id: user.id)
+    assert_equal user, User.authorize_by(provider: 'facebook', auth_token: authentication.auth_token)
+  end
+  test "user authorizes by invalid provider and auth_token" do
+    user = create(:user)
+    authentication = create(:authentication, provider: 'facebook', user_id: user.id)
+    assert_nil User.authorize_by(provider: 'twitter', auth_token: authentication.auth_token)
+  end
 end

@@ -1,20 +1,45 @@
 class AuthController < ApplicationController
-	def create
-		provider, auth_token = params[:provider], params[:auth_token]
-		data = get_data(provider, auth_token)
-		user = User.new data
-		if user.save 
-			user.authentications.find_or_create_by(provider: provider, auth_token: auth_token)
-			render json: { status: :created, data: { user: user }, code: 102 }, status: :created
+	before_filter :define_social_provider
+
+	def index
+		if user = Authentication.find_by(provider: params[:provider], auth_token: params[:auth_token]).try(:user)
+			render json: { status: 200, data: { user: user }, code: 100 }, status: :ok
 		else
-			render json: { status: 422, data: { user: data, errors: user.errors}, status: :unprocessable_entity }
+			data = @provider.get_user_info
+			user_params = { first_name: data[:first_name], last_name: data[:last_name], email: data[:email], age: data[:age] }
+			user = User.new user_params
+			if user.save
+				user.authentications << Authentication.new(provider: params[:provider], auth_token: params[:auth_token])
+				render json: { status: 201, data: { user: user }, code: 101 }, status: :created
+			else
+				render json: { status: 200, data: { user: user_params, errors: user.errors.messages }, code: 102 }, status: :ok
+			end
+		end
+	end
+
+	def create
+		user = User.new(user_params)
+		if user.save
+			user.authentications << Authentication.new(provider: params[:provider], auth_token: params[:auth_token])
+			render json: { status: 201, data: { user: user }, code: 101 }, status: :created
+		else
+			render json: { status: 422, data: { user: user_params, errors: user.errors.messages }, code: 104 }, status: :unprocessable_entity
 		end
 	end
 
 	private
 
-	def get_data(provider, auth_token)
-		# call to facebook and receiving data
-		{ first_name: 'Jack', last_name: 'Sparrow', photo: "http://robohash.org/my-own-slug.png?size=300x300" }
+	def define_social_provider
+		begin
+			providerKlass = params[:provider].titleize.constantize # eg. Facebook, Vkontake
+			@provider = providerKlass.new
+			#TODO: 
+			#@provider.set_auth_token(params[:auth_token])
+		rescue Exception => e
+			render json: { status: 422, code: 500 }, status: :unprocessable_entity
+		end
+	end
+	def user_params
+		params.require(:user).permit(:first_name, :last_name, :email, :age)
 	end
 end
