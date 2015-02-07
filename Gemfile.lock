@@ -120,10 +120,13 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    metaclass (0.0.4)
     method_source (0.8.2)
     mime-types (2.4.3)
     mini_portile (0.6.1)
     minitest (5.5.1)
+    mocha (1.1.0)
+      metaclass (~> 0.0.1)
     multi_json (1.10.1)
     multi_test (0.1.1)
     nenv (0.1.1)
@@ -243,6 +246,7 @@ DEPENDENCIES
   guard-rspec
   guard-spork
   jquery-rails
+  mocha
   pg
   rails (= 4.1.6)
   rspec (>= 3.1.0)
