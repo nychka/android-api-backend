@@ -5,7 +5,11 @@ class AuthController < ApplicationController
 		if user = Authentication.find_by(provider: params[:provider], auth_token: params[:auth_token]).try(:user)
 			render json: { status: 200, data: { user: user }, code: 100 }, status: :ok
 		else
-			data = @provider.get_user_info
+			begin
+				data = @provider.get_user_info
+			rescue Exception => e
+				render json: { status: 422, error_msg: "Invalid token or expired. Try to login again" }, status: :unprocessable_entity and return
+			end
 			user_params = { first_name: data[:first_name], last_name: data[:last_name], email: data[:email], age: data[:age] }
 			user = User.new user_params
 			if user.save
