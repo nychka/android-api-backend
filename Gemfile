@@ -11,6 +11,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
+gem 'pg'
 
 group :test, :development do
   gem 'better_errors'
@@ -27,10 +28,9 @@ group :test, :development do
   gem 'spork-rails'
   gem 'guard-rspec', require: false
   gem 'guard-spork'
-  gem 'sqlite3'
   gem 'shoulda'
   gem 'mocha'
 end
 group :production do
-  gem 'pg'
+
 end

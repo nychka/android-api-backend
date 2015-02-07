@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150131123938) do
+ActiveRecord::Schema.define(version: 20150207085851) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "authentications", force: true do |t|
     t.integer  "user_id",       null: false
@@ -22,8 +25,8 @@ ActiveRecord::Schema.define(version: 20150131123938) do
     t.datetime "updated_at"
   end
 
-  add_index "authentications", ["provider", "auth_token"], name: "index_authentications_on_provider_and_auth_token", unique: true
-  add_index "authentications", ["user_id"], name: "index_authentications_on_user_id"
+  add_index "authentications", ["provider", "auth_token"], name: "index_authentications_on_provider_and_auth_token", unique: true, using: :btree
+  add_index "authentications", ["user_id"], name: "index_authentications_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "first_name"
@@ -33,6 +36,10 @@ ActiveRecord::Schema.define(version: 20150131123938) do
     t.string   "photo"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "access_token"
+    t.datetime "expires_at"
   end
+
+  add_index "users", ["access_token"], name: "index_users_on_access_token", unique: true, using: :btree
 
 end

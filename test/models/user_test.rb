@@ -28,4 +28,11 @@ class UserTest < ActiveSupport::TestCase
     user.valid?
     assert_match /can't be blank/, user.errors[:age].join, "user is not valid: age can't be blank"
   end
+  test "user is not valid without unique access token" do
+    double_token = '123456789'
+    user  = create(:user, access_token: double_token)
+    assert_raise ActiveRecord::RecordInvalid do
+      create(:user, access_token: double_token)
+    end
+  end
 end
