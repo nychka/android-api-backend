@@ -32,9 +32,7 @@ class AuthController < ApplicationController
 	def define_social_provider
 		begin
 			providerKlass = params[:provider].titleize.constantize # eg. Facebook, Vkontake
-			@provider = providerKlass.new
-			#TODO: 
-			#@provider.set_auth_token(params[:auth_token])
+			@provider = providerKlass.new(params[:auth_token])
 		rescue Exception => e
 			render json: { status: 422, code: 500 }, status: :unprocessable_entity
 		end

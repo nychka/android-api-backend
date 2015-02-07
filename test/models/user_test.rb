@@ -29,10 +29,9 @@ class UserTest < ActiveSupport::TestCase
     assert_match /can't be blank/, user.errors[:age].join, "user is not valid: age can't be blank"
   end
   test "user is not valid without unique access token" do
-    double_token = '123456789'
-    user  = create(:user, access_token: double_token)
+    user  = create(:user, access_token: '123456789')
     assert_raise ActiveRecord::RecordInvalid do
-      create(:user, access_token: double_token)
+      create(:user, access_token: user.access_token)
     end
   end
   test "user authorizes by access token" do
@@ -56,5 +55,10 @@ class UserTest < ActiveSupport::TestCase
     user = create(:user)
     authentication = create(:authentication, provider: 'facebook', user_id: user.id)
     assert_nil User.authorize_by(provider: 'twitter', auth_token: authentication.auth_token)
+  end
+  test "creates access token after save" do
+    user_params = attributes_for(:social_user)
+    user = User.create(user_params)
+    assert_not_nil user.access_token
   end
 end

@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   validates :age,        		presence: true, allow_blank: false
   validates :access_token, 	uniqueness: true
 
+  after_create :generate_access_token!
+
   class << self
   	def authorize_by(params)
 	  	if user = params[:access_token].present? ? User.find_by(params) : Authentication.find_by(params).try(:user)

@@ -12,12 +12,11 @@ gem 'turbolinks'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'pg'
+gem 'oauth2'
 
 group :test, :development do
   gem 'better_errors'
   gem 'debugger'
-  gem 'rspec', '>= 3.1.0'
-  gem 'rspec-rails', '>= 3.1.0'
   gem 'database_cleaner'  
   gem 'factory_girl_rails', '>= 4.2.0'
   gem 'capybara', '>= 2.0.3'
@@ -26,7 +25,6 @@ group :test, :development do
   gem 'cucumber-rails', :require => false
   gem 'faker'
   gem 'spork-rails'
-  gem 'guard-rspec', require: false
   gem 'guard-spork'
   gem 'shoulda'
   gem 'mocha'
