@@ -5,11 +5,11 @@ class AuthController < ApplicationController
 		if user = Authentication.find_by(provider: params[:provider], auth_token: params[:auth_token]).try(:user)
 			render json: { status: 200, data: { user: user }, code: 100 }, status: :ok
 		else
-			begin
-				data = @provider.get_user_info
-			rescue Exception => e
-				render json: { status: 422, error_msg: "Invalid token or expired. Try to login again" }, status: :unprocessable_entity and return
+			response = @provider.get_user_info
+			unless response[:success]
+				render json: { status: 422, error_msg: response[:error] }, status: :unprocessable_entity and return
 			end
+			data = response[:body]
 			user_params = { first_name: data[:first_name], last_name: data[:last_name], email: data[:email], age: data[:age] }
 			user = User.new user_params
 			if user.save
@@ -38,7 +38,7 @@ class AuthController < ApplicationController
 			providerKlass = params[:provider].titleize.constantize # eg. Facebook, Vkontake
 			@provider = providerKlass.new(params[:auth_token])
 		rescue Exception => e
-			render json: { status: 422, code: 500 }, status: :unprocessable_entity
+			render json: { status: 422, error_msg: "You should provide valid :provider and :auth_token for authorization", code: 500 }, status: :unprocessable_entity
 		end
 	end
 	def user_params

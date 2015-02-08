@@ -10,9 +10,4 @@ class FacebookTest < ActiveSupport::TestCase
 		assert_respond_to @social_network, :access_token
 		assert_equal @access_token, @social_network.access_token
 	end
-	test "#get_user_info" do
-		data = @social_network.get_user_info
-		assert_equal "Yaroslav", data[:first_name]
-		assert_equal "Nychka", 	data[:last_name]
-	end
 end
