@@ -13,6 +13,7 @@ gem 'turbolinks'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'pg'
 gem 'oauth2'
+gem 'settingslogic' 
 
 group :test, :development do
   gem 'better_errors'

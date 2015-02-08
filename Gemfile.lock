@@ -180,6 +180,7 @@ GEM
       multi_json (~> 1.0)
       rubyzip (~> 1.0)
       websocket (~> 1.0.4)
+    settingslogic (2.0.9)
     shellany (0.0.1)
     shoulda (3.5.0)
       shoulda-context (~> 1.0, >= 1.0.1)
@@ -237,6 +238,7 @@ DEPENDENCIES
   rails (= 4.1.6)
   sdoc (~> 0.4.0)
   selenium-webdriver
+  settingslogic
   shoulda
   spork-rails
   turbolinks

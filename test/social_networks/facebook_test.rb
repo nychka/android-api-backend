@@ -2,12 +2,24 @@ require 'test_helper'
 
 class FacebookTest < ActiveSupport::TestCase
 	def setup
-		@access_token = 'CAAWmkXKqZBXsBAD4xxQBjnkpWj9Fj4ZBqsPah3rEBUbkznUfJ42aFU58jA9m8xL1zJ4fEs6WqNbfWXKEJSAszG0IpbwW3Y9evVee7oRSJkZCTe8GJvkxDMpSJNw4DEEnCFPX7ikqxqk7sbmqXFE9B6wwccIJqQx8zDHovCnny0sR6OCbB2SyKt5pN0BqiGlxrDz9fb10pG6vsQSoPbpd7soyEpzGAwZD'
-		@social_network = Facebook.new(@access_token)
+		@provider = Facebook.new(Settings.facebook.access_token)
 	end
-	test "#access_token" do
-		@social_network.access_token = @access_token
-		assert_respond_to @social_network, :access_token
-		assert_equal @access_token, @social_network.access_token
+	test "#get_data" do
+		response = @provider.get_data('/me', { fields: 'first_name, last_name' })
+		assert response[:success]
+		assert 'Yaroslav', response[:body][:first_name]
+		assert 'Nychka', 	 response[:body][:last_name]
+		assert_nil response[:body][:age]
+	end
+	test "#get_data with invalid token" do
+		provider = Facebook.new('XYZ')
+		response = provider.get_data('/me', { fields: 'first_name, last_name' })
+		refute response[:success]
+		assert_match /Invalid OAuth access token/, response[:error]
+	end
+	test "#get_data with invalid field" do
+		response = @provider.get_data('/me', { fields: 'first_name, last_name, foo' })
+		refute response[:success]
+		assert_match /Tried accessing nonexisting field \(foo\)/, response[:error]
 	end
 end

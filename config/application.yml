@@ -1,0 +1,25 @@
+# config/application.yml
+defaults: &defaults
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+  facebook:
+    site: https://graph.facebook.com
+    app_id: 1590518507829627
+    app_secret: b6365344cb03d318431411494b68a699
+    access_token: CAAWmkXKqZBXsBAM41kULVjJ4nSYiYRgNo8AW8tfc0jRFPabQMcarHXpd4dciNPIioovqCO8ehb6hXq7besxPqTSGIUdOWmVeKG9JtMSdRRXbJZA4qLhJsTfgWQl5V1NqDCfNgDUkWgVlpL5BL1gF1TXK50qmgUL5r1EOPwwP9XCDK0QZCco
+    refresh_token:
+    token_url: 
+  googleplus:
+    site: https://www.googleapis.com
+    app_id: 181585088752-i8fmu6vvrqkbg2t22ucjjaq2tq3vkjsg.apps.googleusercontent.com
+    app_secret: c-Ni0bgq54PNhXHQByCL049f
+    access_token: ya29.FAFzmTpB6bRkDlUppu9DUudDN-tdQHgAsOR6cnfu0JCjgIHtcytrXj0Hc7lhEbtyaz25dBwKJmxduQ
+    refresh_token: 1/S7pnQ0b2b3aiYthnmt99-PVa50UzKkJYEcASif1qASR90RDknAdJa_sgfheVM0XT
+    token_url: https://accounts.google.com/o/oauth2/token
+
+production:
+  <<: *defaults
