@@ -7,8 +7,8 @@ class FacebookTest < ActiveSupport::TestCase
 	test "#get_data" do
 		response = @provider.get_data('/me', { fields: 'first_name, last_name' })
 		assert response[:success]
-		assert 'Yaroslav', response[:body][:first_name]
-		assert 'Nychka', 	 response[:body][:last_name]
+		assert_equal 'Yaroslav', response[:body][:first_name]
+		assert_equal 'Nychka', 	 response[:body][:last_name]
 		assert_nil response[:body][:age]
 	end
 	test "#get_data with invalid token" do

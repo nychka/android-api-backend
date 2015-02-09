@@ -1,6 +1,9 @@
-## 0.0.3 / Unreleased
+## 0.0.4 / Unreleased
+- add uid to User
+
+## 0.0.3 / 10.02.2015
 ### API
-- add authorization by vkontakte
+- add vkontakte
 
 ## 0.0.2 / 09.02.2015
 ### API
