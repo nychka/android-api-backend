@@ -34,11 +34,11 @@ class AuthController < ApplicationController
 	private
 
 	def define_social_provider
-		begin
-			providerKlass = params[:provider].titleize.constantize # eg. Facebook, Vkontake
+		if Settings.has_key? params[:provider]
+			providerKlass = params[:provider].titleize.constantize
 			@provider = providerKlass.new(params[:auth_token])
-		rescue Exception => e
-			render json: { status: 422, error_msg: "You should provide valid :provider and :auth_token for authorization", code: 500 }, status: :unprocessable_entity
+		else
+			render json: { status: 422, error_msg: "You should provide valid provider and auth_token params for authorization", code: 500 }, status: :unprocessable_entity
 		end
 	end
 	def user_params

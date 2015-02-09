@@ -1,5 +1,5 @@
-class GooglePlus < SocialNetwork
-  attr_accessor :user_fields
+class Gplus < SocialNetwork
+  attr_accessor :user_fields, :endpoint
 
   def initialize(access_token)
     super(access_token)

@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class GooglePlusTest < ActiveSupport::TestCase
+class GplusTest < ActiveSupport::TestCase
   def setup
-    @provider = GooglePlus.new(Settings.googleplus.access_token)
+    @provider = Gplus.new(Settings.gplus.access_token)
     @url = '/plus/v1/people/me'
   end
   test "#get_data" do
@@ -15,7 +15,7 @@ class GooglePlusTest < ActiveSupport::TestCase
     assert_equal 21, response[:body][:ageRange][:min]
   end
   test "#get_data with invalid token" do
-    provider = GooglePlus.new('invalid_token')
+    provider = Gplus.new('invalid_token')
     response = provider.get_data(@url, { fields: 'gender' })
     refute response[:success]
     assert_match /Invalid Credentials/, response[:error]
@@ -35,7 +35,7 @@ class GooglePlusTest < ActiveSupport::TestCase
     assert_equal 21, response[:body][:age]
   end
   test "refresh token" do
-    provider = GooglePlus.new('invalid_token')
+    provider = Gplus.new('invalid_token')
     response = provider.get_user_info
     refute response[:success]
     assert_match /Invalid Credentials/, response[:error]
