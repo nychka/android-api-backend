@@ -34,14 +34,22 @@ class AuthController < ApplicationController
 	private
 
 	def define_social_provider
-		if Settings.has_key? params[:provider]
+		if Settings.social_networks.include? params[:provider]
 			providerKlass = params[:provider].titleize.constantize
-			@provider = providerKlass.new(params[:auth_token])
+			@provider = providerKlass.new(params[:auth_token], white_params)
 		else
-			render json: { status: 422, error_msg: "You should provide valid provider and auth_token params for authorization", code: 500 }, status: :unprocessable_entity
+			render json: { status: 422, error_msg: "Sorry, but this provider doesn't support yet", code: 500 }, status: :unprocessable_entity
 		end
 	end
 	def user_params
 		params.require(:user).permit(:first_name, :last_name, :email, :age)
+	end
+	def white_params
+		options = {}
+		Settings.white_params.each do |item|
+			param = item.to_sym
+			options[param] = params[param] if params.has_key?(param) and not params[param].empty?
+		end
+		options
 	end
 end

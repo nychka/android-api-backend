@@ -1,12 +1,12 @@
 class Vkontakte < SocialNetwork
   attr_accessor :user_fields
 
-  def initialize(access_token)
-    super(access_token)
-    @user_fields = 'sex,status'
+  def initialize(access_token, options = {})
+    super(access_token, options)
+    @user_fields = 'sex,city'
   end
   def get_user_info
-    get_data('/method/users.get', { uid: Settings.vkontakte.uid, fields: user_fields }) do |body|
+    get_data('/method/users.get', uid: @options[:uid], fields: user_fields) do |body|
       if body[:response] and body[:response].kind_of? Array
         body = body[:response].first
       end

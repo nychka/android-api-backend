@@ -2,17 +2,17 @@ require 'test_helper'
 
 class VkontakteTest < ActiveSupport::TestCase
   def setup
-    @provider = Vkontakte.new(Settings.vkontakte.access_token)
+    @provider = Vkontakte.new(Settings.vkontakte.access_token, uid: Settings.vkontakte.uid)
   end
   test "#get_data" do
-    response = @provider.get_data('/method/getProfiles', { uid: Settings.vkontakte.uid })
+    response = @provider.get_data('/method/getProfiles', uid: Settings.vkontakte.uid)
     assert response[:success]
     assert_equal 'Володимир', response[:body][:response][0][:first_name]
     assert_equal 'Ходонович',   response[:body][:response][0][:last_name]
   end
   test "method /users.get" do
     fields = 'sex'
-    response = @provider.get_data('/method/users.get', { fields: fields, uid: Settings.vkontakte.uid })
+    response = @provider.get_data('/method/users.get', fields: fields, uid: Settings.vkontakte.uid)
     assert response[:success]
     assert_equal 'Володимир', response[:body][:response][0][:first_name]
     assert_equal 'Ходонович',   response[:body][:response][0][:last_name]

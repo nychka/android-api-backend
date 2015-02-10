@@ -1,8 +1,8 @@
 class Facebook < SocialNetwork
 	attr_accessor :user_fields
 
-	def initialize(access_token)
-		super(access_token)
+	def initialize(access_token, options = {})
+		super(access_token, options)
 		@user_fields = 'first_name, last_name, email, age_range'
 	end
 	def get_user_info

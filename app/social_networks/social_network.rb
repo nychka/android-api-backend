@@ -1,5 +1,6 @@
 class SocialNetwork
-  def initialize(access_token)
+  def initialize(access_token, options)
+    @options = options
     @access_token = access_token
     klass = self.class.to_s.downcase
     @client = OAuth2::Client.new(Settings[klass]['app_id'], Settings[klass]['app_secret'], site: Settings[klass]['site'], token_url: Settings[klass]['token_url'])

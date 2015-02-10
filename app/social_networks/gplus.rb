@@ -1,8 +1,8 @@
 class Gplus < SocialNetwork
   attr_accessor :user_fields, :endpoint
 
-  def initialize(access_token)
-    super(access_token)
+  def initialize(access_token, options = {})
+    super(access_token, options)
     @user_fields = 'emails, ageRange, name(givenName, familyName), gender'
   end
   def get_user_info
@@ -25,6 +25,6 @@ class Gplus < SocialNetwork
   end
   def refresh_token!
     @endpoint = @endpoint.refresh!
-    @endpoint.expired?
+    not @endpoint.expired?
   end
 end

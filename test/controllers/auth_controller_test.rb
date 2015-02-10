@@ -98,4 +98,15 @@ class AuthControllerTest < ActionController::TestCase
     assert_equal 21, body[:data][:user][:age]
     assert_not_nil body[:data][:user][:access_token]
   end
+  test "user registers by Vkontakte using uid" do
+    get :index, { provider: 'vkontakte', auth_token: Settings.vkontakte.access_token, uid: Settings.vkontakte.uid }
+    assert_response 200
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    assert_equal 102, body[:code]
+    assert_equal 'Володимир', body[:data][:user][:first_name]
+    assert_equal 'Ходонович', body[:data][:user][:last_name]
+    assert_equal "can't be blank", body[:data][:errors][:age].join
+    assert_equal "can't be blank", body[:data][:errors][:email].join
+  end
 end

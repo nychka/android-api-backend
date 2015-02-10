@@ -1,5 +1,11 @@
 # config/application.yml
 defaults: &defaults
+  white_params:
+    - uid
+  social_networks: 
+    - facebook
+    - vkontakte
+    - gplus
   facebook:
     site: https://graph.facebook.com
     app_id: 1590518507829627
@@ -11,7 +17,7 @@ defaults: &defaults
     site: https://www.googleapis.com
     app_id: 181585088752-i8fmu6vvrqkbg2t22ucjjaq2tq3vkjsg.apps.googleusercontent.com
     app_secret: c-Ni0bgq54PNhXHQByCL049f
-    access_token: ya29.FQFALEHBlJ7k0929VSeKKNrE811umQCs5dQxat5ZISR56wIdWAOFUZvOsPzxCRS46WnvbYwaV3-fjw
+    access_token: ya29.FgElMjA3tlPs_8ymZILfX1XzXiESAtA0E8rqgblC9V1zhWUOrqq3omGJK_XoVwEpfsCtIkCVh_-Qhg
     refresh_token: 1/S7pnQ0b2b3aiYthnmt99-PVa50UzKkJYEcASif1qASR90RDknAdJa_sgfheVM0XT
     token_url: https://accounts.google.com/o/oauth2/token
   vkontakte:
