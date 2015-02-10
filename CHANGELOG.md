@@ -1,9 +1,9 @@
 ## 0.0.4 / Unreleased
-- add uid to User
+- add additional fields to User
 
 ## 0.0.3 / 10.02.2015
 ### API
-- add vkontakte
+- add authorization vkontakte
 
 ## 0.0.2 / 09.02.2015
 ### API

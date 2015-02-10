@@ -38,7 +38,7 @@ class AuthController < ApplicationController
 			providerKlass = params[:provider].titleize.constantize
 			@provider = providerKlass.new(params[:auth_token], white_params)
 		else
-			render json: { status: 422, error_msg: "Sorry, but this provider doesn't support yet", code: 500 }, status: :unprocessable_entity
+			render json: { status: 422, error_msg: "Sorry, but this provider doesn't supported yet", code: 500 }, status: :unprocessable_entity
 		end
 	end
 	def user_params
