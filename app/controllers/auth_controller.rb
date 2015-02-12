@@ -38,7 +38,8 @@ class AuthController < ApplicationController
 			providerKlass = params[:provider].titleize.constantize
 			@provider = providerKlass.new(params[:auth_token], white_params)
 		else
-			render json: { status: 422, error_msg: "Sorry, but this provider doesn't supported yet", code: 500 }, status: :unprocessable_entity
+			logger.error("AuthController#define_social_provider") { "Unsupported provider was called: #{params[:provider]}" }
+			render json: { status: 422, error_msg: "Maybe you should use one of these social networks: #{Settings.social_networks.join(', ')}", code: 500 }, status: :unprocessable_entity
 		end
 	end
 	def user_params

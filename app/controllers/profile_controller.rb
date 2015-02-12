@@ -10,6 +10,9 @@ class ProfileController < ApplicationController
     if user = User.find_by(access_token: params[:access_token])
       @current_user = user
     else
+      message = "#{request.remote_ip} is trying to authorize "
+      message += (params[:access_token] and not params[:access_token].empty?) ? "with invalid access_token #{params[:access_token]}" : "without access_token"
+      logger.error("ProfileController#authorize!") { message }
       render json: { status: 403, error_msg: 'Access denied: access_token is empty or invalid' }, status: 403
     end
   end

@@ -29,7 +29,9 @@ group :test, :development do
   gem 'guard-spork'
   gem 'shoulda'
   gem 'mocha'
+  gem 'meta_request'
+  gem 'binding_of_caller'
 end
 group :production do
-
+  gem 'rails_12factor'
 end
