@@ -17,10 +17,11 @@ defaults: &defaults
     site: https://www.googleapis.com
     app_id: 181585088752-i8fmu6vvrqkbg2t22ucjjaq2tq3vkjsg.apps.googleusercontent.com
     app_secret: c-Ni0bgq54PNhXHQByCL049f
-    access_token: ya29.FgElMjA3tlPs_8ymZILfX1XzXiESAtA0E8rqgblC9V1zhWUOrqq3omGJK_XoVwEpfsCtIkCVh_-Qhg
+    access_token: ya29.GQEJ_D6gxoFSOLyeDOWyAdMugPxaJcVogOeDwjpceOQqxw7krliQ66VSdy76gs7IvhNqBN88d8J28Q
     refresh_token: 1/S7pnQ0b2b3aiYthnmt99-PVa50UzKkJYEcASif1qASR90RDknAdJa_sgfheVM0XT
     token_url: https://accounts.google.com/o/oauth2/token
   vkontakte:
+    base_site: 'https://vk.com'
     site: https://api.vk.com
     app_id: 4678073
     app_secret: H7MK9nVHpdsGtu77b8NV

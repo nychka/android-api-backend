@@ -12,9 +12,9 @@ class SocialNetwork
       response = @endpoint.get(path, params: params)
       result[:body] = JSON.parse(response.body).deep_symbolize_keys
       result[:body] = yield(result[:body]) if block_given?
+      Rails.logger.debug(self.class.to_s){ result[:body] }
     rescue Exception => e
       Rails.logger.error(self.class.to_s) do
-
        "#{self.class.to_s} failed during fetching data from #{path} and was rescued by the following message: \n\n#{e.message} \n\n #{e.backtrace.join}"
       end
       result[:success] = false

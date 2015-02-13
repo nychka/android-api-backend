@@ -3,7 +3,7 @@ class Gplus < SocialNetwork
 
   def initialize(access_token, options = {})
     super(access_token, options)
-    @user_fields = 'emails, ageRange, name(givenName, familyName), gender'
+    @user_fields = 'emails, ageRange, name(givenName, familyName), gender, image(url), url, placesLived'
   end
   def get_user_info
     get_data('/plus/v1/people/me',  { fields: user_fields }) do |body|
@@ -19,6 +19,18 @@ class Gplus < SocialNetwork
       if body.has_key? :ageRange
         body[:age] = body[:ageRange][:min] if body[:ageRange][:min]
         body.delete(:ageRange)
+      end
+      if body.has_key? :gender and not body[:gender].empty?
+        body[:gender] = (body[:gender] == 'female') ? 1 : 2
+      end
+      if body.has_key? :image and not body[:image].empty?
+        body[:photo] = body[:image][:url]
+        body.delete(:image)
+      end
+      if body.has_key? :placesLived and not body[:placesLived].empty?
+        places = body[:placesLived].find_all{|item| item if item[:primary] }
+        body[:city] = places.first[:value] if places
+        body.delete(:placesLived)
       end
       body
     end
