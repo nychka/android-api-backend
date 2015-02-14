@@ -10,7 +10,10 @@ class AuthController < ApplicationController
 				render json: { status: 422, error_msg: response[:error] }, status: :unprocessable_entity and return
 			end
 			data = response[:body]
-			user_params = { first_name: data[:first_name], last_name: data[:last_name], email: data[:email], age: data[:age] }
+			user_params = { first_name: data[:first_name], last_name: data[:last_name], email: data[:email], age: data[:age], gender: data[:gender], city: data[:city], photo: data[:photo] }
+			socials = {}
+			socials[@provider.name.to_sym] = data[:url] if data.has_key? :url and not data[:url].empty?
+			user_params[:socials] = socials
 			user = User.new user_params
 			if user.save
 				user.authentications << Authentication.new(provider: params[:provider], auth_token: params[:auth_token])
@@ -43,7 +46,7 @@ class AuthController < ApplicationController
 		end
 	end
 	def user_params
-		params.require(:user).permit(:first_name, :last_name, :email, :age)
+		params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo)
 	end
 	def white_params
 		options = {}

@@ -2,9 +2,12 @@ class SocialNetwork
   def initialize(access_token, options)
     @options = options
     @access_token = access_token
-    klass = self.class.to_s.downcase
-    @client = OAuth2::Client.new(Settings[klass]['app_id'], Settings[klass]['app_secret'], site: Settings[klass]['site'], token_url: Settings[klass]['token_url'])
-    @endpoint = OAuth2::AccessToken.new(@client, access_token, { refresh_token: Settings[klass]['refresh_token'] })
+    @name = self.class.to_s.downcase
+    @client = OAuth2::Client.new(Settings[@name]['app_id'], Settings[@name]['app_secret'], site: Settings[@name]['site'], token_url: Settings[@name]['token_url'])
+    @endpoint = OAuth2::AccessToken.new(@client, access_token, { refresh_token: Settings[@name]['refresh_token'] })
+  end
+  def name
+    @name
   end
 	def get_data(path, params)
     begin

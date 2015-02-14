@@ -5,6 +5,8 @@ FactoryGirl.define do
 		age 					{ rand(10..70) }
 		email 				{ Faker::Internet.email }
 		photo 				{ Faker::Avatar.image }
+		gender 				{ [1, 2].sample }
+		city					{ Faker::Address.city }
 		access_token 	{ SecureRandom.urlsafe_base64(nil, false) }
 		expires_at		{ DateTime.now + 1.day }
 	end
@@ -13,5 +15,9 @@ FactoryGirl.define do
 		last_name 		{ Faker::Name.last_name }
 		age 					{ rand(10..70) }
 		email 				{ Faker::Internet.email }
+		gender 				{ [1, 2].sample }
+		city					{ Faker::Address.city }
+		url 					{ Faker::Internet.url }
+		photo 				{ Faker::Avatar.image }
 	end
 end

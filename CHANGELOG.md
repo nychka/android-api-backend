@@ -1,5 +1,6 @@
-## 0.0.4 / Unreleased
-- add additional fields to User
+## 0.0.4 / 14.02.2015
+### API
+- add additional fields to User: city, gender, photo, socials
 
 ## 0.0.3 / 10.02.2015
 ### API

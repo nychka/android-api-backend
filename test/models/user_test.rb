@@ -58,7 +58,18 @@ class UserTest < ActiveSupport::TestCase
   end
   test "creates access token after save" do
     user_params = attributes_for(:social_user)
+    user_params.delete(:url)
     user = User.create(user_params)
     assert_not_nil user.access_token
+  end
+  test "user has not valid gender" do
+    user = build(:user, gender: 3)
+    user.valid?
+    assert_match /is not included in the list/, user.errors[:gender].join
+  end
+  test "user has many socials" do
+    user = build(:user)
+    user.socials = { facebook: Settings.facebook.site, vkontakte: Settings.vkontakte.site, gplus: Settings.gplus.site }
+    assert user.valid?
   end
 end

@@ -42,18 +42,23 @@ class AuthControllerTest < ActionController::TestCase
     assert_equal @auth_token, authentication.auth_token
   end
   test "user registers by social network two step procedure: 1 / 2" do
-    @data[:body] = attributes_for(:social_user, age: nil)
+    @data[:body] = attributes_for(:social_user, age: nil, url: Settings[@provider]['site'])
+    @data[:body][:socials] = {}
+    @data[:body][:socials][@provider.to_sym] = Settings[@provider]['site']
     Facebook.any_instance.stubs(:get_user_info).returns(@data)
     get :index, { provider: @provider, auth_token: @auth_token }
     assert_response 200
     body = JSON.parse(response.body).deep_symbolize_keys
     assert_equal 200, body[:status]
     assert_equal 102, body[:code], "require additional information to complete registration" 
+    @data[:body].delete(:url)
     assert_equal @data[:body], body[:data][:user]
     assert_equal "can't be blank", body[:data][:errors][:age].join
   end
   test "user registers by social network two step procedure" do
-    @data[:body] = attributes_for(:social_user, age: nil)
+    @data[:body] = attributes_for(:social_user, age: nil, url: Settings[@provider]['site'])
+    @data[:body][:socials] = {}
+    @data[:body][:socials][@provider.to_sym] = Settings[@provider]['site']
     Facebook.any_instance.stubs(:get_user_info).returns(@data)
     # First step
     get :index, { provider: @provider, auth_token: @auth_token }
@@ -61,6 +66,7 @@ class AuthControllerTest < ActionController::TestCase
     body = JSON.parse(response.body).deep_symbolize_keys
     assert_equal 200, body[:status]
     assert_equal 102, body[:code], "require additional information to complete registration" 
+    @data[:body].delete(:url)
     assert_equal @data[:body], body[:data][:user]
     assert_equal "can't be blank", body[:data][:errors][:age].join
     # Second step
@@ -75,7 +81,7 @@ class AuthControllerTest < ActionController::TestCase
   test "user registers by Facebook two step procedure" do
     #@data[:body] = { first_name: 'Yaroslav', last_name: 'Nychka' }
     #Facebook.any_instance.stubs(:get_user_info).returns(@data)
-    user_fields = 'first_name,last_name,email'
+    user_fields = 'first_name,last_name,email,gender,location'
     Facebook.any_instance.stubs(:user_fields).returns(user_fields)
     # First step
     get :index, { provider: @provider, auth_token: @auth_token }
