@@ -29,17 +29,6 @@ class VkontakteTest < ActiveSupport::TestCase
     assert_equal 2, response[:body][:gender]
     assert_equal "https://vk.com/vovan4uck", response[:body][:url]
     assert_equal 'http://cs614819.vk.me/v614819121/21825/c4G3zwahwbw.jpg', response[:body][:photo]
-    assert_equal 'Lviv', response[:body][:city]
+    assert_equal 'Яворов', response[:body][:city]
   end
-  #http://vk.com/dev/secure.checkToken
-  # test '/method/secure.checkToken' do
-  #   response = @provider.get_data('/method/secure.checkToken', { 
-  #     access_token: Settings.vkontakte.access_token,
-  #     client_secret: Settings.vkontakte.app_secret
-  #   })
-  #   p response
-  #   assert response[:success]
-  #   assert_equal 1, response[:body][:success]
-  #   assert_equal Settings.vkontakte.uid, response[:body][:user_id]
-  # end
 end

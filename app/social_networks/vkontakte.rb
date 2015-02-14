@@ -22,10 +22,19 @@ class Vkontakte < SocialNetwork
         body[:photo] = body[:photo_100]
         body.delete(:photo_100)
       end
+      if body.has_key? :city
+        response = get_city_by_id(body[:city])
+        if response[:success] and response[:body][:response].kind_of? Array
+          body[:city] = response[:body][:response].first[:name] 
+        else
+          body.delete(:city)
+        end
+      end
       body
     end
   end
-  def get_user_city(id)
+  def get_city_by_id(id)
     # Your code goes here
+    get_data('/method/database.getCitiesById', city_ids: "#{id}")
   end
 end
