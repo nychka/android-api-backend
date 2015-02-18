@@ -72,4 +72,23 @@ class UserTest < ActiveSupport::TestCase
     user.socials = { facebook: Settings.facebook.site, vkontakte: Settings.vkontakte.site, gplus: Settings.gplus.site }
     assert user.valid?
   end
+  test "user as_json attributes" do
+    user = create(:model_user)
+    json = user.as_json
+    refute json.has_key? :updated_at
+    refute json.has_key? :created_at
+  end
+  test "user's links must be an Array" do
+    user = create(:model_user)
+    json = user.as_json
+    assert json['links'].kind_of? Array
+    assert_equal 3, json['links'].count
+    assert_equal user.socials.values, json['links']
+  end
+  test "bdate" do
+    user = build(:model_user, bdate: Date.parse('1993-02-17'))
+    assert user.valid?
+    assert_equal '17/02/1993', user.bdate.as_json
+    assert_equal '1993-02-17', user.read_attribute(:bdate).as_json
+  end
 end

@@ -5,7 +5,7 @@ class AuthControllerTest < ActionController::TestCase
     DatabaseCleaner.start
     @data = { success: true, body: attributes_for(:user) }
     @provider =  'facebook'
-    @auth_token = 'CAAWmkXKqZBXsBAM41kULVjJ4nSYiYRgNo8AW8tfc0jRFPabQMcarHXpd4dciNPIioovqCO8ehb6hXq7besxPqTSGIUdOWmVeKG9JtMSdRRXbJZA4qLhJsTfgWQl5V1NqDCfNgDUkWgVlpL5BL1gF1TXK50qmgUL5r1EOPwwP9XCDK0QZCco'
+    @auth_token = Settings[@provider]['access_token']
   end
   def teardown
     DatabaseCleaner.clean
@@ -17,11 +17,11 @@ class AuthControllerTest < ActionController::TestCase
     get :index, { provider: auth.provider, auth_token: auth.auth_token }
     assert_response 200
     body = JSON.parse(response.body).deep_symbolize_keys
+    user_as_json = user.as_json.symbolize_keys.delete_if{ |item| item =~ /_at$/ }
+    received_user = body[:data][:user].delete_if{ |item| item =~ /_at$/ }
     assert_equal 200, body[:status]
     assert_equal 100, body[:code], "successfully authorized"
-    created_user = user.attributes.symbolize_keys.delete_if{ |k,v| k =~ /_at$/ }
-    received_user = body[:data][:user].delete_if{ |k,v| k =~ /_at$/ }
-    assert_equal created_user, received_user
+    assert_equal user_as_json, received_user
   end
   test "social network is unsupported" do
     get :index, { provider: 'twitter', auth_token: @auth_token }
@@ -79,8 +79,6 @@ class AuthControllerTest < ActionController::TestCase
     assert_equal 22, body[:data][:user][:age]
   end
   test "user registers by Facebook two step procedure" do
-    #@data[:body] = { first_name: 'Yaroslav', last_name: 'Nychka' }
-    #Facebook.any_instance.stubs(:get_user_info).returns(@data)
     user_fields = 'first_name,last_name,email,gender,location'
     Facebook.any_instance.stubs(:user_fields).returns(user_fields)
     # First step

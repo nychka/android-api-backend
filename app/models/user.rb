@@ -28,4 +28,19 @@ class User < ActiveRecord::Base
   	self.expires_at	= DateTime.now + 1.day
   	self.save!
   end
+
+  def as_json(options={})
+    options = { except: [:created_at, :updated_at, :socials], methods: [:links, :bdate] }.merge(options)
+    super(options)
+  end
+
+  def bdate
+    birthday = read_attribute(:bdate)
+    birthday.strftime('%d/%m/%Y') if birthday.kind_of? Date 
+  end
+
+  def links
+    links = read_attribute(:socials)
+    links.kind_of?(Hash) ? links.values : []
+  end
 end

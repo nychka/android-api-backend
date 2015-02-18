@@ -3,7 +3,7 @@ class Facebook < SocialNetwork
 
 	def initialize(access_token, options = {})
 		super(access_token, options)
-		@user_fields = 'first_name, last_name, email, age_range, gender, location, link, picture'
+		@user_fields = 'first_name, last_name, email, age_range, gender, location, link, picture, birthday'
 	end
 	def get_user_info
 		get_data('/me',  { fields: user_fields }) do |body|
@@ -26,6 +26,14 @@ class Facebook < SocialNetwork
 				body[:photo] = body[:picture][:data][:url]
 				body.delete(:picture)
 			end
+			if body.has_key? :birthday
+			 	bdate_format = '%m/%d/%Y'
+        bdate = Date._strptime(body[:birthday], bdate_format)
+        if bdate && bdate.has_key?(:year) && bdate[:year] > 0
+        	body[:bdate] = Date.strptime(body[:birthday], bdate_format).to_s 
+        end
+        body.delete(:birthday)
+      end
 			body
 		end
 	end

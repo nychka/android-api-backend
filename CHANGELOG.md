@@ -1,3 +1,13 @@
+## 0.0.6 / Unreleased
+### API
+- add Content-Type and Accept headers
+- add big photos e.g 200x200
+
+## 0.0.5 / 18.02.2015
+### API
+- add date field: bdate
+- change param socials to Array for response
+
 ## 0.0.4 / 14.02.2015
 ### API
 - add additional fields to User: city, gender, photo, socials

@@ -20,4 +20,12 @@ FactoryGirl.define do
 		url 					{ Faker::Internet.url }
 		photo 				{ Faker::Avatar.image }
 	end
+	factory :model_user, class: User, parent: :user do
+		socials 	do
+		 	hash = {}
+		 	Settings.social_networks.each{|item| hash[item] = Faker::Internet.url }
+		 	hash
+		end
+		bdate { 20.years.ago.to_date }
+	end
 end

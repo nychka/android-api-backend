@@ -10,7 +10,7 @@ class AuthController < ApplicationController
 				render json: { status: 422, error_msg: response[:error] }, status: :unprocessable_entity and return
 			end
 			data = response[:body]
-			user_params = { first_name: data[:first_name], last_name: data[:last_name], email: data[:email], age: data[:age], gender: data[:gender], city: data[:city], photo: data[:photo] }
+			user_params = { first_name: data[:first_name], last_name: data[:last_name], email: data[:email], age: data[:age], gender: data[:gender], city: data[:city], photo: data[:photo], bdate: data[:bdate] }
 			socials = {}
 			socials[@provider.name.to_sym] = data[:url] if data.has_key? :url and not data[:url].empty?
 			user_params[:socials] = socials
@@ -46,7 +46,7 @@ class AuthController < ApplicationController
 		end
 	end
 	def user_params
-		params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo)
+		params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate)
 	end
 	def white_params
 		options = {}

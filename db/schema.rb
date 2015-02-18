@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150214152225) do
+ActiveRecord::Schema.define(version: 20150216213546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20150214152225) do
     t.string   "city"
     t.integer  "gender",       limit: 2
     t.hstore   "socials"
+    t.date     "bdate"
   end
 
   add_index "users", ["access_token"], name: "index_users_on_access_token", unique: true, using: :btree

@@ -3,7 +3,7 @@ class Vkontakte < SocialNetwork
 
   def initialize(access_token, options = {})
     super(access_token, options)
-    @user_fields = 'sex,city,photo_100,domain'
+    @user_fields = 'sex,city,photo_200_orig,domain,bdate'
   end
   def get_user_info
     get_data('/method/users.get', uid: @options[:uid], fields: user_fields) do |body|
@@ -18,9 +18,9 @@ class Vkontakte < SocialNetwork
         body[:url] = "#{Settings.vkontakte.base_site}/#{body[:domain]}"
         body.delete(:domain)
       end
-      if body.has_key? :photo_100
-        body[:photo] = body[:photo_100]
-        body.delete(:photo_100)
+      if body.has_key? :photo_200_orig
+        body[:photo] = body[:photo_200_orig]
+        body.delete(:photo_200_orig)
       end
       if body.has_key? :city
         response = get_city_by_id(body[:city])
@@ -30,11 +30,18 @@ class Vkontakte < SocialNetwork
           body.delete(:city)
         end
       end
+      if body.has_key? :bdate
+        date = Date._parse(body[:bdate])
+        if date.has_key?(:year) && date[:year] > 0
+          body[:bdate] = Date.parse(body[:bdate]).to_s 
+        else
+          body.delete(:bdate)
+        end
+      end
       body
     end
   end
   def get_city_by_id(id)
-    # Your code goes here
     get_data('/method/database.getCitiesById', city_ids: "#{id}")
   end
 end

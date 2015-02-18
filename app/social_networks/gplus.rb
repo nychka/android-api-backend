@@ -3,7 +3,7 @@ class Gplus < SocialNetwork
 
   def initialize(access_token, options = {})
     super(access_token, options)
-    @user_fields = 'emails, ageRange, name(givenName, familyName), gender, image(url), url, placesLived'
+    @user_fields = 'emails, ageRange, name(givenName, familyName), gender, image(url), url, placesLived, birthday'
   end
   def get_user_info
     get_data('/plus/v1/people/me',  { fields: user_fields }) do |body|
@@ -31,6 +31,11 @@ class Gplus < SocialNetwork
         places = body[:placesLived].find_all{|item| item if item[:primary] }
         body[:city] = places.first[:value] if places
         body.delete(:placesLived)
+      end
+      if body.has_key? :birthday
+        date = Date._parse(body[:birthday])
+        body[:bdate] = Date.parse(body[:birthday]).to_s if date.has_key?(:year) && date[:year] > 0
+        body.delete(:birthday)
       end
       body
     end
