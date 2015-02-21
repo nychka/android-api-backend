@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
 
-  resources :users
+  #resources :users
 
-  resources :authentications
+  #resources :authentications
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   match 'auth', to: 'auth#index', via: [:get, :post]
   match 'auth/create', to: 'auth#create', via: :post
   match 'profile', to: 'profile#index', via: :get
+  match 'users', to: 'users#update', via: :put
+  match 'users', to: 'users#create', via: :post
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -29,21 +29,6 @@ class AuthController < ApplicationController
 		end
 	end
 
-	def create
-		# OPTIMIZE
-		if user = User.find_by(email: user_params[:email])
-			user.add_social_network authentication_params
-			render json: { status: 200, data: { user: user }, code: 103 }, status: :ok and return
-		end
-		user = User.new(user_params)
-		if user.save
-			user.add_social_network authentication_params
-			render json: { status: 201, data: { user: user }, code: 101 }, status: :created
-		else
-			render json: { status: 422, data: { user: user_params, errors: user.errors.messages }, code: 104 }, status: :unprocessable_entity
-		end
-	end
-
 	private
 
 	def define_social_provider

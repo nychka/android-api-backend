@@ -1,58 +1,34 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :authorize!, except: :create
 
-  # GET /users
-  def index
-    @users = User.all
-  end
-
-  # GET /users/1
-  def show
-  end
-
-  # GET /users/new
-  def new
-    @user = User.new
-  end
-
-  # GET /users/1/edit
-  def edit
-  end
-
-  # POST /users
   def create
-    @user = User.new(user_params)
-
-    if @user.save
-      redirect_to @user, notice: 'User was successfully created.'
+    if user = User.find_by(email: user_params[:email])
+      user.add_social_network authentication_params
+      render json: { status: 200, data: { user: user }, code: 103 }, status: :ok and return
+    end
+    user = User.new(user_params)
+    if user.save
+      user.add_social_network authentication_params
+      render json: { status: 201, data: { user: user }, code: 101 }, status: :created
     else
-      render :new
+      render json: { status: 422, data: { user: user_params, errors: user.errors.messages }, code: 104 }, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
-      redirect_to @user, notice: 'User was successfully updated.'
+    @current_user.attributes = user_params
+    if @current_user.save
+      render json: { status: 200, data: { user: @current_user.as_json }, code: 110 }, status: :ok
     else
-      render :edit
+      render json: { status: 422, data: { user: user_params, errors: @current_user.errors.messages }, code: 104 }, status: :unprocessable_entity
     end
-  end
-
-  # DELETE /users/1
-  def destroy
-    @user.destroy
-    redirect_to users_url, notice: 'User was successfully destroyed.'
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
-
-    # Only allow a trusted parameter "white list" through.
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :age, :email, :photo)
+      params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate)
+    end
+    def authentication_params
+      { provider: params[:provider], auth_token: params[:auth_token] }
     end
 end

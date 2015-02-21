@@ -5,6 +5,8 @@
 
 ## 0.0.6 / 21.02.2015
 ### API
+- changed route: /auth/create to: /users
+- add PUT /users
 - connect other social networks by email
 
 ## 0.0.5 / 18.02.2015
