@@ -1,6 +1,14 @@
 class UsersController < ApplicationController
   before_action :authorize!, except: :create
+  before_action :set_user, only: :show
 
+  def show
+    if @user
+      render json: { status: 200, data: { user: @user.as_json }}, status: :ok
+    else
+      render json: { status: 404, error_msg: 'user not found'}, status: :not_found
+    end
+  end
   def create
     if user = User.find_by(email: user_params[:email])
       user.add_social_network authentication_params
@@ -25,6 +33,9 @@ class UsersController < ApplicationController
   end
 
   private
+    def set_user
+      @user = User.find(params[:id]) rescue nil
+    end
     def user_params
       params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate)
     end

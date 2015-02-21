@@ -11,10 +11,10 @@ Rails.application.routes.draw do
   root 'profile#index'
 
   match 'auth', to: 'auth#index', via: [:get, :post]
-  match 'auth/create', to: 'auth#create', via: :post
   match 'profile', to: 'profile#index', via: :get
   match 'users', to: 'users#update', via: :put
   match 'users', to: 'users#create', via: :post
+  match 'users/:id', to: 'users#show', via: :get
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
