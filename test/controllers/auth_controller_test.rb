@@ -42,9 +42,9 @@ class AuthControllerTest < ActionController::TestCase
     assert_equal @auth_token, authentication.auth_token
   end
   test "user registers by social network two step procedure: 1 / 2" do
-    @data[:body] = attributes_for(:social_user, age: nil, url: Settings[@provider]['site'])
-    @data[:body][:socials] = {}
-    @data[:body][:socials][@provider.to_sym] = Settings[@provider]['site']
+    extra = { bdate: nil, socials: {} }
+    extra[:socials][@provider.to_sym] = Settings[@provider]['site']
+    @data[:body] = attributes_for(:social_user, age: nil, url: Settings[@provider]['site']).merge(extra)
     Facebook.any_instance.stubs(:get_user_info).returns(@data)
     get :index, { provider: @provider, auth_token: @auth_token }
     assert_response 200
@@ -56,9 +56,9 @@ class AuthControllerTest < ActionController::TestCase
     assert_equal "can't be blank", body[:data][:errors][:age].join
   end
   test "user registers by social network two step procedure" do
-    @data[:body] = attributes_for(:social_user, age: nil, url: Settings[@provider]['site'])
-    @data[:body][:socials] = {}
-    @data[:body][:socials][@provider.to_sym] = Settings[@provider]['site']
+    extra = { bdate: nil, socials: {} }
+    extra[:socials][@provider.to_sym] = Settings[@provider]['site']
+    @data[:body] = attributes_for(:social_user, age: nil, url: Settings[@provider]['site']).merge(extra)
     Facebook.any_instance.stubs(:get_user_info).returns(@data)
     # First step
     get :index, { provider: @provider, auth_token: @auth_token }
@@ -112,5 +112,66 @@ class AuthControllerTest < ActionController::TestCase
     assert_equal 'Ходонович', body[:data][:user][:last_name]
     assert_equal "can't be blank", body[:data][:errors][:age].join
     assert_equal "can't be blank", body[:data][:errors][:email].join
+  end
+  test "user adds other social network" do
+    email = 'test@mail.com'
+    user = create(:user, email: email)
+    @data[:body] = attributes_for(:social_user, email: email, url: Settings['gplus']['site'])
+    Gplus.any_instance.stubs(:get_user_info).returns(@data)
+    # 1. add one social network to existing user
+    user.authentications << build(:authentication, provider: 'facebook')
+    # 2. register using Gplus with the same email
+    get :index, { provider: 'gplus', auth_token: Settings.gplus.access_token }
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    # 3. Gplus must connect to existing user
+    assert_equal 103, body[:code], "social network has been connected to user"
+    assert_equal 2, user.authentications.count
+  end
+  test "user connects Gplus and Facebook" do
+    email = 'test@mail.com'
+    user = create(:user, email: email)
+    user.authentications << build(:authentication, provider: 'vkontakte')
+    # mocking data
+    @data[:body] = attributes_for(:social_user, email: email, url: Settings['gplus']['site'])
+    Gplus.any_instance.stubs(:get_user_info).returns(@data)
+    @data[:body] = attributes_for(:social_user, email: email, url: Settings['facebook']['site'])
+    Facebook.any_instance.stubs(:get_user_info).returns(@data)
+    # 2. register using Gplus with the same email
+    get :index, { provider: 'gplus', auth_token: Settings.gplus.access_token }
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    # 3. Gplus must connect to existing user
+    assert_equal 103, body[:code], "social network has been connected to user"
+    assert_equal 2, user.authentications.count
+    # 4. register using Facebook with the same email
+    get :index, { provider: 'facebook', auth_token: Settings.facebook.access_token }
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    # 5. Facebook must connect to existing user
+    assert_equal 103, body[:code], "social network has been connected to user"
+    assert_equal 3, user.authentications.count
+  end
+  test "user connects Vkontakte two step procedure" do
+    email = 'test@mail.com'
+    user = create(:user, email: email)
+    user.authentications << build(:authentication, provider: 'facebook')
+    # mocking data
+    @data[:body] = attributes_for(:social_user, email: nil, url: Settings['vkontakte']['site'])
+    Vkontakte.any_instance.stubs(:get_user_info).returns(@data)
+    # 1. First step procedure
+    get :index, { provider: 'vkontakte', auth_token: Settings.vkontakte.access_token }
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    assert_equal 102, body[:code], "require additional information to complete registration"
+    assert_equal 1, user.authentications.count
+    # 2. User sends additional information to complete registration
+    @data[:body][:email] = email
+    post :create, { provider: 'vkontakte', auth_token: Settings.vkontakte.access_token, user: @data[:body] }
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    # 3. Facebook must connect to existing user
+    assert_equal 103, body[:code], "social network has been connected to user"
+    assert_equal 2, user.authentications.count
   end
 end

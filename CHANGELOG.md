@@ -1,7 +1,11 @@
-## 0.0.6 / Unreleased
+## 0.0.7 / Unreleased
 ### API
 - add Content-Type and Accept headers
 - add big photos e.g 200x200
+
+## 0.0.6 / 21.02.2015
+### API
+- connect other social networks by email
 
 ## 0.0.5 / 18.02.2015
 ### API

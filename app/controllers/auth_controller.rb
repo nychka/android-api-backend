@@ -10,13 +10,18 @@ class AuthController < ApplicationController
 				render json: { status: 422, error_msg: response[:error] }, status: :unprocessable_entity and return
 			end
 			data = response[:body]
+			if user = User.find_by(email: data[:email])
+				user.add_social_network authentication_params
+				render json: { status: 200, data: { user: user }, code: 103 }, status: :ok and return
+			end
+			# OPTIMIZE: 
 			user_params = { first_name: data[:first_name], last_name: data[:last_name], email: data[:email], age: data[:age], gender: data[:gender], city: data[:city], photo: data[:photo], bdate: data[:bdate] }
 			socials = {}
 			socials[@provider.name.to_sym] = data[:url] if data.has_key? :url and not data[:url].empty?
 			user_params[:socials] = socials
 			user = User.new user_params
 			if user.save
-				user.authentications << Authentication.new(provider: params[:provider], auth_token: params[:auth_token])
+				user.add_social_network authentication_params
 				render json: { status: 201, data: { user: user }, code: 101 }, status: :created
 			else
 				render json: { status: 200, data: { user: user_params, errors: user.errors.messages }, code: 102 }, status: :ok
@@ -25,9 +30,14 @@ class AuthController < ApplicationController
 	end
 
 	def create
+		# OPTIMIZE
+		if user = User.find_by(email: user_params[:email])
+			user.add_social_network authentication_params
+			render json: { status: 200, data: { user: user }, code: 103 }, status: :ok and return
+		end
 		user = User.new(user_params)
 		if user.save
-			user.authentications << Authentication.new(provider: params[:provider], auth_token: params[:auth_token])
+			user.add_social_network authentication_params
 			render json: { status: 201, data: { user: user }, code: 101 }, status: :created
 		else
 			render json: { status: 422, data: { user: user_params, errors: user.errors.messages }, code: 104 }, status: :unprocessable_entity
@@ -44,6 +54,9 @@ class AuthController < ApplicationController
 			logger.error("AuthController#define_social_provider") { "Unsupported provider was called: #{params[:provider]}" }
 			render json: { status: 422, error_msg: "Maybe you should use one of these social networks: #{Settings.social_networks.join(', ')}", code: 500 }, status: :unprocessable_entity
 		end
+	end
+	def authentication_params
+		{ provider: params[:provider], auth_token: params[:auth_token] }
 	end
 	def user_params
 		params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate)

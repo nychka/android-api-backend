@@ -20,6 +20,11 @@ class User < ActiveRecord::Base
   	end
   end
   
+  def add_social_network(params)
+    self.authentications << Authentication.new(params)
+  end
+  
+
   def generate_access_token!
   	self.access_token = loop do
   		token = SecureRandom.urlsafe_base64(nil, false)

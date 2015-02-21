@@ -7,8 +7,8 @@ class ProfileControllerTest < ActionController::TestCase
   test "access denied for unauthorized user" do
     get :index, {}
     body = JSON.parse(response.body).symbolize_keys
-    assert_response 403
-    assert_equal 403, body[:status]
+    assert_response 401
+    assert_equal 401, body[:status]
     assert_equal @error_msg, body[:error_msg]
   end
   test "access denied for invalid access token" do
@@ -16,8 +16,8 @@ class ProfileControllerTest < ActionController::TestCase
     access_token = "#{user.access_token}i"
     get :index, { access_token: access_token }
     body = JSON.parse(response.body).deep_symbolize_keys
-    assert_response 403
-    assert_equal 403, body[:status]
+    assert_response 401
+    assert_equal 401, body[:status]
     assert_equal @error_msg, body[:error_msg]
   end
   test "access allowed for authorized user" do
