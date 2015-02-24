@@ -1,7 +1,11 @@
-## 0.0.7 / Unreleased
+## 0.0/8 / Unrealsed
 ### API
-- add Content-Type and Accept headers
-- add big photos e.g 200x200
+- add big photos e.g 200x200 for facebook and gplus
+
+## 0.0.7 / 24.02.2015
+### API
+- check access_token inside user param when PUT /users
+- remove errors for unrequired fields from response
 
 ## 0.0.6 / 21.02.2015
 ### API

@@ -3,6 +3,7 @@ require 'test_helper'
 class FacebookTest < ActiveSupport::TestCase
 	def setup
 		@provider = Facebook.new(Settings.facebook.access_token)
+    @photo_url = 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xaf1/v/t1.0-1/c0.0.50.50/p50x50/10991287_883609968372767_4105506535833576513_n.jpg?oh=c1c2eaaf485b36e866e540f0ddb2c0d4&oe=55902C34&__gda__=1434609255_26a62f4ec188fc10ec85f245652de6e5'
 	end
 	test "#get_data" do
 		response = @provider.get_data('/me', { fields: 'first_name, last_name, gender, email, age_range, location, link, picture, birthday' })
@@ -14,7 +15,7 @@ class FacebookTest < ActiveSupport::TestCase
 		assert_equal 'nychka08@yandex.ru', 	 response[:body][:email]
 		assert_equal 'Lviv, Ukraine', response[:body][:location][:name]
 		assert_equal 'https://www.facebook.com/app_scoped_user_id/876897375710693/', response[:body][:link]
-		assert_equal response[:body][:picture][:data][:url], 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xaf1/v/t1.0-1/p50x50/10933767_867907716609659_5536678363741348646_n.jpg?oh=87804d407bef55bd79966b91238c866e&oe=55557B02&__gda__=1431262901_46d987031814e00d4bc22b65cf2451fe'
+		assert_equal response[:body][:picture][:data][:url], @photo_url
 		assert_equal '02/17/1993', response[:body][:birthday]
 	end
 	test "#get_user_info" do
@@ -27,7 +28,7 @@ class FacebookTest < ActiveSupport::TestCase
 		assert_equal 2, 	 response[:body][:gender]
 		assert_equal 'Lviv', response[:body][:city]
 		assert_equal 'https://www.facebook.com/app_scoped_user_id/876897375710693/', response[:body][:url]
-		assert_equal response[:body][:photo], 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xaf1/v/t1.0-1/p50x50/10933767_867907716609659_5536678363741348646_n.jpg?oh=87804d407bef55bd79966b91238c866e&oe=55557B02&__gda__=1431262901_46d987031814e00d4bc22b65cf2451fe'
+		assert_equal response[:body][:photo], @photo_url
 		assert_equal '1993-02-17', response[:body][:bdate]
 	end
 	test "#get_data with invalid token" do

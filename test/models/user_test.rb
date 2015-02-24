@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  should validate_presence_of(:age)
   should validate_presence_of(:first_name)
   should validate_presence_of(:last_name)
   should validate_presence_of(:email)
@@ -24,9 +23,9 @@ class UserTest < ActiveSupport::TestCase
     assert user.save
   end
   test "user's required field can't be blank" do
-    user = build(:user, age: nil)
+    user = build(:user, email: nil)
     user.valid?
-    assert_match /can't be blank/, user.errors[:age].join, "user is not valid: age can't be blank"
+    assert_match /can't be blank/, user.errors[:email].join, "user is not valid: email can't be blank"
   end
   test "user is not valid without unique access token" do
     user  = create(:user, access_token: '123456789')

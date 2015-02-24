@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_action :authorize!, except: :create
+  before_action :authorize!, only: :show
+  before_action :authorize_with_settings, only: :update
   before_action :set_user, only: :show
 
   def show
@@ -33,13 +34,21 @@ class UsersController < ApplicationController
   end
 
   private
-    def set_user
-      @user = User.find(params[:id]) rescue nil
+
+  def authorize_with_settings
+    settings = {}
+    if params[:user] && params[:user][:access_token]
+      settings[:access_token] = params[:user][:access_token]
     end
-    def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate)
-    end
-    def authentication_params
-      { provider: params[:provider], auth_token: params[:auth_token] }
-    end
+    authorize! settings
+  end
+  def set_user
+    @user = User.find(params[:id]) rescue nil
+  end
+  def user_params
+    params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate)
+  end
+  def authentication_params
+    { provider: params[:provider], auth_token: params[:auth_token] }
+  end
 end

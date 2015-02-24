@@ -6,7 +6,7 @@ class GplusTest < ActiveSupport::TestCase
     @provider = Gplus.new(Settings.gplus.access_token)
     @provider.refresh_token!
     @url = '/plus/v1/people/me'
-    @photo = 'https://lh6.googleusercontent.com/-EOoHdnqhmaU/AAAAAAAAAAI/AAAAAAAAENs/YT-FzaZYOLQ/photo.jpg?sz=50'
+    @photo = 'https://lh6.googleusercontent.com/-EOoHdnqhmaU/AAAAAAAAAAI/AAAAAAAAEQs/FPhz4bEwXVs/photo.jpg?sz=50'
   end
   test "#get_data" do
     response = @provider.get_data(@url, { fields: 'gender,ageRange,birthday,emails, name(familyName,givenName),url, image(url), placesLived' })

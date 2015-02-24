@@ -4,9 +4,9 @@ class User < ActiveRecord::Base
   validates :first_name, 		presence: true, allow_blank: false
   validates :last_name,  		presence: true, allow_blank: false
   validates :email,      		presence: true, allow_blank: false
-  validates :age,        		presence: true, allow_blank: false
-  validates :city,          presence: true, allow_blank: false
-  validates :gender,        presence: true, allow_blank: false, inclusion: { in: 1..2 }
+  validates :age,        		presence: false, allow_blank: false
+  validates :city,          presence: false, allow_blank: false
+  validates :gender,        presence: false, allow_blank: false, inclusion: { in: 1..2 }
   validates :access_token, 	uniqueness: true
 
   after_create :generate_access_token!

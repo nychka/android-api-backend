@@ -36,6 +36,17 @@ class UsersControllerTest < ActionController::TestCase
 		assert_equal 110, body[:code]
 		assert_equal user.first_name, body[:data][:user][:first_name]
 	end
+  test "update user with access_token inside user" do
+    user = create(:user, first_name: 'Ivan')
+    user.first_name = 'Petro'
+    put :update, { user: user.attributes }
+    assert_response 200
+    user.reload
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    assert_equal 110, body[:code]
+    assert_equal 'Petro', body[:data][:user][:first_name]
+  end
 	test "trying to update as unauthorized user" do
 		put :update, { access_token: nil, user: attributes_for(:social_user) }
 		assert_response 401
@@ -53,6 +64,17 @@ class UsersControllerTest < ActionController::TestCase
 		assert_equal 104, body[:code]
 		assert_equal "can't be blank", body[:data][:errors][:email].join
 	end
+  test "update user with required params" do
+    user = create(:user)
+    user_params = { first_name: 'John', last_name: 'Rain', email: 'john@snow.com', city: nil, gender: 0 }
+    user_params[:access_token] = user.access_token
+    put :update, { user: user_params }
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 422, body[:status]
+    assert_equal 104, body[:code]
+    assert_equal 1, body[:data][:errors].count
+    assert_equal "is not included in the list", body[:data][:errors][:gender].join
+  end
 	test "user not found" do
   	jack = create(:user)
   	get :show, { access_token: jack.access_token, id: 0 }

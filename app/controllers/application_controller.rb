@@ -4,8 +4,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   protect_from_forgery with: :null_session, :if => Proc.new { |c| c.request.format == 'application/json' }
 
-  def authorize!
-    if user = User.find_by(access_token: params[:access_token])
+  def authorize!(settings=nil)
+    default_settings = { access_token: params[:access_token] }
+    options = ( settings.nil? ) ? default_settings : settings
+    if user = User.find_by(options)
       @current_user = user
     else
       message = "#{request.remote_ip} is trying to authorize "

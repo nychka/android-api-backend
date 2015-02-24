@@ -44,7 +44,7 @@ class AuthControllerTest < ActionController::TestCase
   test "user registers by social network two step procedure: 1 / 2" do
     extra = { bdate: nil, socials: {} }
     extra[:socials][@provider.to_sym] = Settings[@provider]['site']
-    @data[:body] = attributes_for(:social_user, age: nil, url: Settings[@provider]['site']).merge(extra)
+    @data[:body] = attributes_for(:social_user, email: nil, url: Settings[@provider]['site']).merge(extra)
     Facebook.any_instance.stubs(:get_user_info).returns(@data)
     get :index, { provider: @provider, auth_token: @auth_token }
     assert_response 200
@@ -53,7 +53,7 @@ class AuthControllerTest < ActionController::TestCase
     assert_equal 102, body[:code], "require additional information to complete registration" 
     @data[:body].delete(:url)
     assert_equal @data[:body], body[:data][:user]
-    assert_equal "can't be blank", body[:data][:errors][:age].join
+    assert_equal "can't be blank", body[:data][:errors][:email].join
   end
   test "user registers by Vkontakte using uid" do
     get :index, { provider: 'vkontakte', auth_token: Settings.vkontakte.access_token, uid: Settings.vkontakte.uid }
@@ -63,7 +63,6 @@ class AuthControllerTest < ActionController::TestCase
     assert_equal 102, body[:code]
     assert_equal 'Володимир', body[:data][:user][:first_name]
     assert_equal 'Ходонович', body[:data][:user][:last_name]
-    assert_equal "can't be blank", body[:data][:errors][:age].join
     assert_equal "can't be blank", body[:data][:errors][:email].join
   end
   test "user adds other social network" do
