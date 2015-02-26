@@ -48,7 +48,7 @@ class AuthController < ApplicationController
 		options = {}
 		Settings.white_params.each do |item|
 			param = item.to_sym
-			options[param] = params[param] if params.has_key?(param) and not params[param].empty?
+			options[param] = params[param] unless params[param].nil? || params[param].empty?
 		end
 		options
 	end

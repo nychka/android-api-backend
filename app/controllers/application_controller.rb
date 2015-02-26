@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   def authorize!(settings=nil)
     default_settings = { access_token: params[:access_token] }
-    options = ( settings.nil? ) ? default_settings : settings
+    options = ( settings.nil? || settings.empty? ) ? default_settings : settings
     if user = User.find_by(options)
       @current_user = user
     else

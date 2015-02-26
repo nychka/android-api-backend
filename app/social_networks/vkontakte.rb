@@ -7,7 +7,9 @@ class Vkontakte < SocialNetwork
   end
   def get_user_info
     get_data('/method/users.get', uid: @options[:uid], fields: user_fields) do |body|
-      if body[:response] and body[:response].kind_of? Array
+      raise "param :uid is not present, maybe you forgot to add it?" unless @options[:uid]
+
+      if body[:response] and not body[:response].empty?
         body = body[:response].first
       end
       if body.has_key? :sex
