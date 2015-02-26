@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   validates :age,        		presence: false, allow_blank: false
   validates :city,          presence: false, allow_blank: false
   validates :gender,        presence: false, allow_blank: false, inclusion: { in: 1..2 }
+  validates :links,         presence: false
   validates :access_token, 	uniqueness: true
 
   after_create :generate_access_token!
@@ -35,17 +36,12 @@ class User < ActiveRecord::Base
   end
 
   def as_json(options={})
-    options = { except: [:created_at, :updated_at, :socials], methods: [:links, :bdate] }.merge(options)
+    options = { except: [:created_at, :updated_at], methods: [:bdate] }.merge(options)
     super(options)
   end
 
   def bdate
     birthday = read_attribute(:bdate)
     birthday.strftime('%d/%m/%Y') if birthday.kind_of? Date 
-  end
-
-  def links
-    links = read_attribute(:socials)
-    links.kind_of?(Hash) ? links.values : []
   end
 end

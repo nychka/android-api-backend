@@ -66,9 +66,9 @@ class UserTest < ActiveSupport::TestCase
     user.valid?
     assert_match /is not included in the list/, user.errors[:gender].join
   end
-  test "user has many socials" do
+  test "user has many links" do
     user = build(:user)
-    user.socials = { facebook: Settings.facebook.site, vkontakte: Settings.vkontakte.site, gplus: Settings.gplus.site }
+    user.links = [Settings.facebook.site, Settings.vkontakte.site, Settings.gplus.site ]
     assert user.valid?
   end
   test "user as_json attributes" do
@@ -79,15 +79,29 @@ class UserTest < ActiveSupport::TestCase
   end
   test "user's links must be an Array" do
     user = create(:model_user)
-    json = user.as_json
-    assert json['links'].kind_of? Array
-    assert_equal 3, json['links'].count
-    assert_equal user.socials.values, json['links']
+    user_as_json = user.as_json
+    assert user_as_json['links'].kind_of? Array
+    assert_equal 3, user_as_json['links'].count
+    assert_equal user.links, user_as_json['links']
   end
   test "bdate" do
     user = build(:model_user, bdate: Date.parse('1993-02-17'))
     assert user.valid?
     assert_equal '17/02/1993', user.bdate.as_json
     assert_equal '1993-02-17', user.read_attribute(:bdate).as_json
+  end
+  test "read links" do
+    socials = ['foo', 'bar']
+    user = build(:user, links: socials)
+    assert_equal socials, user.links
+    assert_equal 2, user.links.count
+    assert_equal socials, user.links
+  end
+  test "write links" do
+    user = build(:user)
+    links = ['foo', 'bar']
+    user.links = links
+    assert_equal 2, user.links.count
+    assert_equal links, user.links
   end
 end

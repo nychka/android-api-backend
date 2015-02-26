@@ -46,7 +46,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id]) rescue nil
   end
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate)
+    params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate, :links => [])
   end
   def authentication_params
     { provider: params[:provider], auth_token: params[:auth_token] }

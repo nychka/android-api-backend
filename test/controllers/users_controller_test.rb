@@ -36,6 +36,19 @@ class UsersControllerTest < ActionController::TestCase
 		assert_equal 110, body[:code]
 		assert_equal user.first_name, body[:data][:user][:first_name]
 	end
+  test "user creates with links" do
+  end
+  test "user updates links" do
+    user = create(:user, first_name: 'Rudolf')
+    links = ['foo', 'bar']
+    user_params = { last_name: 'Nuts', links: links }
+    put :update, { access_token: user.access_token, user: user_params }
+    assert_response 200
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    assert_equal 110, body[:code]
+    assert_equal links, body[:data][:user][:links]
+  end
   test "update user with access_token inside user" do
     user = create(:user, first_name: 'Ivan')
     user.first_name = 'Petro'

@@ -34,8 +34,7 @@ class UserRegistrationFlowsTest < ActionDispatch::IntegrationTest
     assert_not_nil body[:data][:user][:access_token]
   end
   test "user registers by social network two step procedure" do
-    extra = { bdate: nil, socials: {} }
-    extra[:socials][@provider.to_sym] = Settings[@provider]['site']
+    extra = { bdate: nil, links: Array(Settings[@provider]['site']) }
     @data[:body] = attributes_for(:social_user, email: nil, url: Settings[@provider]['site']).merge(extra)
     Facebook.any_instance.stubs(:get_user_info).returns(@data)
     # First step
@@ -55,6 +54,8 @@ class UserRegistrationFlowsTest < ActionDispatch::IntegrationTest
     assert_equal 201, body[:status]
     assert_equal 101, body[:code], "successfully registered"
     assert_equal 'test@user.com', body[:data][:user][:email]
+    assert_equal 1, body[:data][:user][:links].count
+    assert_equal Settings[@provider]['site'], body[:data][:user][:links].first
   end
 	test "user connects Vkontakte two step procedure" do
     email = 'test@mail.com'

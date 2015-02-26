@@ -1,6 +1,10 @@
-## 0.0/8 / Unrealsed
+## 0.0.9 / Unrealesed
 ### API
 - add big photos e.g 200x200 for facebook and gplus
+
+## 0.0.8 / 26.02.2015
+### API
+- add and update links
 
 ## 0.0.7 / 24.02.2015
 ### API

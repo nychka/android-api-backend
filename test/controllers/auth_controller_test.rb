@@ -42,8 +42,7 @@ class AuthControllerTest < ActionController::TestCase
     assert_equal @auth_token, authentication.auth_token
   end
   test "user registers by social network two step procedure: 1 / 2" do
-    extra = { bdate: nil, socials: {} }
-    extra[:socials][@provider.to_sym] = Settings[@provider]['site']
+    extra = { bdate: nil, links: Array(Settings[@provider]['site']) }
     @data[:body] = attributes_for(:social_user, email: nil, url: Settings[@provider]['site']).merge(extra)
     Facebook.any_instance.stubs(:get_user_info).returns(@data)
     get :index, { provider: @provider, auth_token: @auth_token }
@@ -54,6 +53,8 @@ class AuthControllerTest < ActionController::TestCase
     @data[:body].delete(:url)
     assert_equal @data[:body], body[:data][:user]
     assert_equal "can't be blank", body[:data][:errors][:email].join
+    assert_equal 1, body[:data][:user][:links].count
+    assert_equal Settings[@provider]['site'], body[:data][:user][:links].first
   end
   test "user registers by Vkontakte using uid" do
     get :index, { provider: 'vkontakte', auth_token: Settings.vkontakte.access_token, uid: Settings.vkontakte.uid }
