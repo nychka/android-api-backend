@@ -3,7 +3,8 @@ class AuthController < ApplicationController
 
 	def index
 		if user = Authentication.find_by(provider: params[:provider], auth_token: params[:auth_token]).try(:user)
-			render json: { status: 200, data: { user: user }, code: 100 }, status: :ok
+			#render json: { status: 200, data: { user: user }, code: 100 }, status: :ok
+			render '/users/create', locals: { status: 200, user: user }, status: :ok
 		else
 			response = @provider.get_user_info
 			unless response[:success]
@@ -12,7 +13,8 @@ class AuthController < ApplicationController
 			data = response[:body]
 			if user = User.find_by(email: data[:email])
 				user.add_social_network authentication_params
-				render json: { status: 200, data: { user: user }, code: 103 }, status: :ok and return
+				#render json: { status: 200, data: { user: user }, code: 103 }, status: :ok and return
+				render '/users/create', locals: { status: 200, user: user }, status: :ok and return
 			end
 			# OPTIMIZE: 
 			user_params = { first_name: data[:first_name], last_name: data[:last_name], email: data[:email], age: data[:age], gender: data[:gender], city: data[:city], photo: data[:photo], bdate: data[:bdate] }
@@ -20,7 +22,8 @@ class AuthController < ApplicationController
 			user = User.new user_params
 			if user.save
 				user.add_social_network authentication_params
-				render json: { status: 201, data: { user: user }, code: 101 }, status: :created
+				#render json: { status: 201, data: { user: user }, code: 101 }, status: :created
+				render '/users/create', locals: { status: 201, user: user }, status: :created
 			else
 				render json: { status: 200, data: { user: user_params, errors: user.errors.messages }, code: 102 }, status: :ok
 			end

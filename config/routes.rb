@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
 
+  namespace :admin do
+    resources :places
+  end
+
+  namespace :admin do
+    resources :ads
+  end
+
   #resources :users
 
   #resources :authentications

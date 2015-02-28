@@ -1,6 +1,15 @@
-## 0.0.9 / Unrealesed
+## 0.0.10 / Unrealesed
 ### API
 - add big photos e.g 200x200 for facebook and gplus
+### Admin
+- CRUD ad
+- CRUD place
+- CRUD user
+- CRUD authentication
+
+## 0.0.9 / 1.03.2015
+### API
+- add ad for GET /users/:id
 
 ## 0.0.8 / 26.02.2015
 ### API

@@ -4,16 +4,25 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   protect_from_forgery with: :null_session, :if => Proc.new { |c| c.request.format == 'application/json' }
 
+  helper_method :current_user
+
   def authorize!(settings=nil)
     default_settings = { access_token: params[:access_token] }
     options = ( settings.nil? || settings.empty? ) ? default_settings : settings
     if user = User.find_by(options)
       @current_user = user
+      @current_user
     else
       message = "#{request.remote_ip} is trying to authorize "
       message += (params[:access_token] and not params[:access_token].empty?) ? "with invalid access_token #{params[:access_token]}" : "without access_token"
       logger.error("ProfileController#authorize!") { message }
       render json: { status: 401, error_msg: 'Access denied: access_token is empty or invalid' }, status: 401
     end
+  end
+
+  private 
+
+  def current_user
+    @current_user
   end
 end

@@ -11,11 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150226202034) do
+ActiveRecord::Schema.define(version: 20150228095842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "ads", force: true do |t|
+    t.string   "name"
+    t.string   "price"
+    t.integer  "place_id"
+    t.string   "photo"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "ads", ["place_id"], name: "index_ads_on_place_id", using: :btree
 
   create_table "authentications", force: true do |t|
     t.integer  "user_id",       null: false
@@ -28,6 +39,15 @@ ActiveRecord::Schema.define(version: 20150226202034) do
 
   add_index "authentications", ["provider", "auth_token"], name: "index_authentications_on_provider_and_auth_token", unique: true, using: :btree
   add_index "authentications", ["user_id"], name: "index_authentications_on_user_id", using: :btree
+
+  create_table "places", force: true do |t|
+    t.string   "name"
+    t.string   "phone"
+    t.decimal  "lng",        precision: 10, scale: 6
+    t.decimal  "lat",        precision: 10, scale: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "first_name"

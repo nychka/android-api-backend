@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   def show
     if @user
-      render json: { status: 200, data: { user: @user.as_json }}, status: :ok
+      render '/users/show', locals: { status: 200, user: @user, ads: Ad.random }, status: :ok
     else
       render json: { status: 404, error_msg: 'user not found'}, status: :not_found
     end
@@ -13,7 +13,8 @@ class UsersController < ApplicationController
   def create
     if user = User.find_by(email: user_params[:email])
       user.add_social_network authentication_params
-      render json: { status: 200, data: { user: user }, code: 103 }, status: :ok and return
+      render '/users/create', locals: { status: 200, user: @user }, status: :ok and return
+      #render json: { status: 200, data: { user: user }, code: 103 }, status: :ok and return
     end
     user = User.new(user_params)
     if user.save
@@ -27,14 +28,14 @@ class UsersController < ApplicationController
   def update
     @current_user.attributes = user_params
     if @current_user.save
-      render json: { status: 200, data: { user: @current_user.as_json }, code: 110 }, status: :ok
+      render '/users/create', locals: { status: 200, user: @current_user }, status: :ok
+      #render json: { status: 200, data: { user: @current_user.as_api }, code: 110 }, status: :ok
     else
       render json: { status: 422, data: { user: user_params, errors: @current_user.errors.messages }, code: 104 }, status: :unprocessable_entity
     end
   end
 
   private
-
   def authorize_with_settings
     settings = {}
     if params[:user] && params[:user][:access_token]

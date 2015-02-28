@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @admin_ad.name %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @admin_ad.price %>
+</p>
+
+<p>
+  <strong>Place:</strong>
+  <%= @admin_ad.place_id %>
+</p>
+
+<p>
+  <strong>Photo:</strong>
+  <%= @admin_ad.photo %>
+</p>
+
+<%= link_to 'Edit', edit_admin_ad_path(@admin_ad) %> |
+<%= link_to 'Back', admin_ads_path %>

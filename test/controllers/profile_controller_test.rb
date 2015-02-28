@@ -3,6 +3,8 @@ require 'test_helper'
 class ProfileControllerTest < ActionController::TestCase
   setup do
     @error_msg = 'Access denied: access_token is empty or invalid'
+    @request.headers["Content-Type"] = "application/json"
+    @request.headers["Accept"] = "application/json"
   end
   test "access denied for unauthorized user" do
     get :index, {}
