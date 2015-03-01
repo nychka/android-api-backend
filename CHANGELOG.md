@@ -1,6 +1,7 @@
 ## 0.0.10 / Unrealesed
 ### API
-- add big photos e.g 200x200 for facebook and gplus
+- fix authentication updating for user
+- add phone, lng, lat for user
 ### Admin
 - CRUD ad
 - CRUD place
@@ -11,6 +12,7 @@
 ### API
 - add ad for GET /users/:id
 - restrict request format to application/json
+- add big photos e.g 200x200 for facebook and gplus
 
 ## 0.0.8 / 26.02.2015
 ### API

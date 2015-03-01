@@ -6,7 +6,8 @@ class GplusTest < ActiveSupport::TestCase
     @provider = Gplus.new(Settings.gplus.access_token)
     @provider.refresh_token!
     @url = '/plus/v1/people/me'
-    @photo = 'https://lh6.googleusercontent.com/-EOoHdnqhmaU/AAAAAAAAAAI/AAAAAAAAEQs/FPhz4bEwXVs/photo.jpg?sz=50'
+    @default_photo = 'https://lh6.googleusercontent.com/-EOoHdnqhmaU/AAAAAAAAAAI/AAAAAAAAEQs/FPhz4bEwXVs/photo.jpg?sz=50'
+    @photo = 'https://lh6.googleusercontent.com/-EOoHdnqhmaU/AAAAAAAAAAI/AAAAAAAAEQs/FPhz4bEwXVs/photo.jpg?sz=200'
   end
   test "#get_data" do
     response = @provider.get_data(@url, { fields: 'gender,ageRange,birthday,emails, name(familyName,givenName),url, image(url), placesLived' })
@@ -16,7 +17,7 @@ class GplusTest < ActiveSupport::TestCase
     assert_equal 'Ярослав', response[:body][:name][:givenName]
     assert_equal 'Ничка', response[:body][:name][:familyName]
     assert_equal response[:body][:url], 'https://plus.google.com/+ЯрославНичка'
-    assert_equal @photo, response[:body][:image][:url]
+    assert_equal @default_photo, response[:body][:image][:url]
     assert_equal 21, response[:body][:ageRange][:min]
     assert_equal 'Lviv', response[:body][:placesLived][0][:value]
     assert_equal '1986-04-26', response[:body][:birthday]

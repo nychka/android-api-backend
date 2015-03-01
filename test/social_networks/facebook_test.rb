@@ -3,7 +3,8 @@ require 'test_helper'
 class FacebookTest < ActiveSupport::TestCase
 	def setup
 		@provider = Facebook.new(Settings.facebook.access_token)
-    @photo_url = 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xaf1/v/t1.0-1/c0.0.50.50/p50x50/10991287_883609968372767_4105506535833576513_n.jpg?oh=c1c2eaaf485b36e866e540f0ddb2c0d4&oe=55902C34&__gda__=1434609255_26a62f4ec188fc10ec85f245652de6e5'
+    @default_picture_size = 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xaf1/v/t1.0-1/c0.0.50.50/p50x50/10991287_883609968372767_4105506535833576513_n.jpg?oh=c1c2eaaf485b36e866e540f0ddb2c0d4&oe=55902C34&__gda__=1434609255_26a62f4ec188fc10ec85f245652de6e5'
+    @photo_url = 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xaf1/v/t1.0-1/c0.0.200.200/p200x200/10991287_883609968372767_4105506535833576513_n.jpg?oh=f2d0569d4b1d013275abd1cb3b0e951f&oe=55861939&__gda__=1433917562_60980af084ea469de71c209807e1e960'
 	end
 	test "#get_data" do
 		response = @provider.get_data('/me', { fields: 'first_name, last_name, gender, email, age_range, location, link, picture, birthday' })
@@ -15,7 +16,7 @@ class FacebookTest < ActiveSupport::TestCase
 		assert_equal 'nychka08@yandex.ru', 	 response[:body][:email]
 		assert_equal 'Lviv, Ukraine', response[:body][:location][:name]
 		assert_equal 'https://www.facebook.com/app_scoped_user_id/876897375710693/', response[:body][:link]
-		assert_equal response[:body][:picture][:data][:url], @photo_url
+		assert_equal response[:body][:picture][:data][:url], @default_picture_size
 		assert_equal '02/17/1993', response[:body][:birthday]
 	end
 	test "#get_user_info" do
@@ -76,5 +77,10 @@ class FacebookTest < ActiveSupport::TestCase
     assert_nil response[:body][:birthday]
     assert_equal 'Woolf', response[:body][:first_name]
     assert_equal '1989-02-17', response[:body][:bdate]
+  end
+  test "get user picture 200x200" do
+    response = @provider.get_data('/me/picture', { height: 200, width: 200, redirect: false } ) # 200x200
+    assert response[:success]
+    assert_match /200x200/, response[:body][:data][:url]
   end
 end

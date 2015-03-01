@@ -4,6 +4,11 @@ class Facebook < SocialNetwork
 	def initialize(access_token, options = {})
 		super(access_token, options)
 		@user_fields = 'first_name, last_name, email, age_range, gender, location, link, picture, birthday'
+		@photo_size = { height: 200, width: 200 }
+	end
+	def get_picture(options={})
+		options = @photo_size.merge(options)
+		get_data('/me/picture', options.merge(redirect: false))
 	end
 	def get_user_info
 		get_data('/me',  { fields: user_fields }) do |body|
@@ -23,7 +28,12 @@ class Facebook < SocialNetwork
 				body.delete(:link)
 			end
 			if body.has_key? :picture and not body[:picture].empty?
-				body[:photo] = body[:picture][:data][:url]
+				response = get_picture
+				if response[:success]
+					body[:photo] = response[:body][:data][:url]
+				else
+					body[:photo] = body[:picture][:data][:url]
+				end
 				body.delete(:picture)
 			end
 			if body.has_key? :birthday
