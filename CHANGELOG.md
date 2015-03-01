@@ -10,6 +10,7 @@
 ## 0.0.9 / 1.03.2015
 ### API
 - add ad for GET /users/:id
+- restrict request format to application/json
 
 ## 0.0.8 / 26.02.2015
 ### API

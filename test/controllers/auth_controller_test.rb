@@ -12,6 +12,17 @@ class AuthControllerTest < ActionController::TestCase
   def teardown
     DatabaseCleaner.clean
   end
+  test "bad request format" do
+    @request.headers["Accept"] = "application/html"
+    @request.headers['Content-Type'] = 'application/html'
+    user = create(:user)
+    auth = create(:authentication, user_id: user.id)
+    get :index, { provider: auth.provider, auth_token: auth.auth_token }
+    assert_response 400
+    body = JSON.parse(response.body).symbolize_keys
+    assert_equal 400, body[:status]
+    assert_match /Bad request/, body[:error_msg]
+  end
   test "user successfully authorizes by social network" do
     user = create(:user)
     auth = create(:authentication, user_id: user.id)

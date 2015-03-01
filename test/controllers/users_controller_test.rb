@@ -9,6 +9,17 @@ class UsersControllerTest < ActionController::TestCase
   def teardown
     DatabaseCleaner.clean
   end
+  test "bad request format" do
+    @request.headers["Accept"] = "application/html"
+    @request.headers['Content-Type'] = 'application/html'
+    jack = create(:user)
+    susana = create(:user, first_name: 'Susana')
+    get :show, { access_token: jack.access_token, id: susana.id }
+    assert_response 400
+    body = JSON.parse(response.body).symbolize_keys
+    assert_equal 400, body[:status]
+    assert_match /Bad request/, body[:error_msg]
+  end
   test "GET /users/:id" do
   	jack = create(:user)
   	susana = create(:user, first_name: 'Susana')
