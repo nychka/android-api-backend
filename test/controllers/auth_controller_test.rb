@@ -12,6 +12,18 @@ class AuthControllerTest < ActionController::TestCase
   def teardown
     DatabaseCleaner.clean
   end
+  test "creates user without unnecessary fields" do
+    @data[:body][:gender] = nil
+    @data[:body][:city] = nil
+    @data[:body][:age] = nil
+    @data[:body][:links] = nil
+    Facebook.any_instance.stubs(:get_user_info).returns(@data)
+    get :index, { provider: @provider, auth_token: @auth_token }
+    assert_response 201
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 201, body[:status]
+    assert_nil body[:data][:errors]
+  end
   test "bad request format" do
     @request.headers["Accept"] = "application/html"
     @request.headers['Content-Type'] = 'application/html'
