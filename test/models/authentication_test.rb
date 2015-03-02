@@ -18,4 +18,12 @@ class AuthenticationTest < ActiveSupport::TestCase
     auth = build(:authentication, user_id: nil)
     assert_not auth.valid?, "invalid authentication without user_id"
   end
+  test "dependent destroy" do
+    user = create(:user)
+    auth1 = create(:authentication, provider: 'facebook', user_id: user.id)
+    auth2 = create(:authentication, provider: 'twitter', user_id: user.id)
+    assert_difference 'Authentication.count', -2 do
+      user.destroy
+    end
+  end
 end

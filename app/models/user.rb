@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-	has_many :authentications
+	has_many :authentications, dependent: :delete_all
 
   validates :first_name, 		presence: true, allow_blank: false
   validates :last_name,  		presence: true, allow_blank: false
@@ -22,7 +22,9 @@ class User < ActiveRecord::Base
   end
   
   def add_social_network(params)
-    self.authentications << Authentication.new(params)
+    auth = self.authentications.find_or_initialize_by(provider: params[:provider])
+    auth.assign_attributes(auth_token: params[:auth_token])
+    auth.save
   end
   
 

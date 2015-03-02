@@ -1,12 +1,16 @@
-## 0.0.10 / Unrealesed
+## 0.0.11 / Unrealesed
 ### API
-- fix authentication updating for user
 - add phone, lng, lat for user
 ### Admin
 - CRUD ad
 - CRUD place
 - CRUD user
 - CRUD authentication
+
+## 0.0.10 / 2.03.2015
+### API
+- improved User#add_social_provider by updating existing authentication
+- add user dependence for authentications - if user will be destroyed all his authentications will be too
 
 ## 0.0.9 / 1.03.2015
 ### API

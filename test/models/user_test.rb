@@ -90,4 +90,14 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 2, user.links.count
     assert_equal links, user.links
   end
+  test "#add_social_network" do
+    user = create(:user)
+    auth = create(:authentication, provider: 'facebook', auth_token: 'XYZ', user_id: user.id)
+    params = { provider: 'facebook', user_id: user.id, auth_token: 'MNL' }
+    assert_difference 'Authentication.count', 0 do
+      user.add_social_network(params)
+    end
+    auth.reload
+    assert_equal auth, Authentication.find_by(params)
+  end
 end
