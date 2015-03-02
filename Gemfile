@@ -33,6 +33,6 @@ group :test, :development do
   gem 'meta_request'
   gem 'binding_of_caller'
 end
-group :production do
+group :production, :staging do
   gem 'rails_12factor'
 end
