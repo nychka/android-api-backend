@@ -32,6 +32,9 @@ group :test, :development do
   gem 'mocha'
   gem 'meta_request'
   gem 'binding_of_caller'
+  gem 'capistrano', '~> 3.3.0'
+  gem 'capistrano-bundler', '~> 1.1.2'
+  gem 'capistrano-rvm'
 end
 group :production, :staging do
   gem 'rails_12factor'
