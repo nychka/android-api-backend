@@ -1,11 +1,10 @@
 Rails.application.routes.draw do
 
-  namespace :admin do
-    resources :places
-  end
+  devise_for :admins, controllers: { sessions: "admins/sessions", registrations: "admins/registrations", passwords: "admins/passwords" }
 
   namespace :admin do
-    resources :ads
+    resources :places, :ads, :users
+    get 'welcome/index'
   end
 
   #resources :users
@@ -16,7 +15,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'profile#index'
+  root 'admin/welcome#index'
 
   match 'auth', to: 'auth#index', via: [:get, :post]
   match 'profile', to: 'profile#index', via: :get

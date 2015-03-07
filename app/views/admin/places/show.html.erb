@@ -2,23 +2,23 @@
 
 <p>
   <strong>Name:</strong>
-  <%= @admin_place.name %>
+  <%= @place.name %>
 </p>
 
 <p>
   <strong>Phone:</strong>
-  <%= @admin_place.phone %>
+  <%= @place.phone %>
 </p>
 
 <p>
   <strong>Lng:</strong>
-  <%= @admin_place.lng %>
+  <%= @place.lng %>
 </p>
 
 <p>
   <strong>Lat:</strong>
-  <%= @admin_place.lat %>
+  <%= @place.lat %>
 </p>
 
-<%= link_to 'Edit', edit_admin_place_path(@admin_place) %> |
+<%= link_to 'Edit', edit_admin_place_path(@place) %> |
 <%= link_to 'Back', admin_places_path %>

@@ -1,4 +1,4 @@
-class AuthController < ApplicationController
+class AuthController < ApiController
 	before_filter :define_social_provider
 
 	def index

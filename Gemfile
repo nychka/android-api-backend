@@ -15,6 +15,10 @@ gem 'pg'
 gem 'oauth2'
 gem 'settingslogic'
 gem 'rabl'
+gem 'devise'
+gem 'simple_form'
+gem 'will_paginate-bootstrap'
+gem 'rdiscount'
 
 group :test, :development do
   gem 'better_errors'

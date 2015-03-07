@@ -1,9 +1,10 @@
 class Admin::PlacesController < ApplicationController
-  before_action :set_admin_place, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_admin!
+  before_action :set_place, only: [:show, :edit, :update, :destroy]
 
   # GET /admin/places
   def index
-    @admin_places = Admin::Place.all
+    @places = Place.all
   end
 
   # GET /admin/places/1
@@ -12,7 +13,7 @@ class Admin::PlacesController < ApplicationController
 
   # GET /admin/places/new
   def new
-    @admin_place = Admin::Place.new
+    @place = Place.new
   end
 
   # GET /admin/places/1/edit
@@ -21,10 +22,10 @@ class Admin::PlacesController < ApplicationController
 
   # POST /admin/places
   def create
-    @admin_place = Admin::Place.new(admin_place_params)
+    @place = Place.new(place_params)
 
-    if @admin_place.save
-      redirect_to @admin_place, notice: 'Place was successfully created.'
+    if @place.save
+      redirect_to [:admin, @place], notice: 'Place was successfully created.'
     else
       render :new
     end
@@ -32,8 +33,8 @@ class Admin::PlacesController < ApplicationController
 
   # PATCH/PUT /admin/places/1
   def update
-    if @admin_place.update(admin_place_params)
-      redirect_to @admin_place, notice: 'Place was successfully updated.'
+    if @place.update(place_params)
+      redirect_to [:admin, @place], notice: 'Place was successfully updated.'
     else
       render :edit
     end
@@ -41,18 +42,18 @@ class Admin::PlacesController < ApplicationController
 
   # DELETE /admin/places/1
   def destroy
-    @admin_place.destroy
+    @place.destroy
     redirect_to admin_places_url, notice: 'Place was successfully destroyed.'
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_admin_place
-      @admin_place = Admin::Place.find(params[:id])
+    def set_place
+      @place = Place.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.
-    def admin_place_params
-      params.require(:admin_place).permit(:name, :phone, :lng, :lat)
+    def place_params
+      params.require(:place).permit(:name, :phone, :lng, :lat)
     end
 end

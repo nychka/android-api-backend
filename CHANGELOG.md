@@ -1,11 +1,17 @@
-## 0.0.11 / Unrealesed
+## 0.1.1 / Unrealesed
 ### API
 - add phone, lng, lat for user
+
 ### Admin
-- CRUD ad
-- CRUD place
-- CRUD user
-- CRUD authentication
+- join ads and places
+- add authentications for users
+
+## 0.1.0 / 7.03.2015
+### Admin
+- add admin authentication using devise
+- CRUD users
+- CRUD ads
+- CRUD places
 
 ## 0.0.10 / 2.03.2015
 ### API

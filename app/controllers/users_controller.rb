@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController < ApiController
   before_action :authorize!, only: :show
   before_action :authorize_with_settings, only: :update
   before_action :set_user, only: :show

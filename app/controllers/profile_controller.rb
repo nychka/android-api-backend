@@ -1,4 +1,4 @@
-class ProfileController < ApplicationController
+class ProfileController < ApiController
   before_action :authorize!
 
   def index

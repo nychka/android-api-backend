@@ -1,4 +1,4 @@
-<h1>Listing admin_places</h1>
+<h1>Listing places</h1>
 
 <table>
   <thead>
@@ -12,15 +12,15 @@
   </thead>
 
   <tbody>
-    <% @admin_places.each do |admin_place| %>
+    <% @places.each do |admin_place| %>
       <tr>
         <td><%= admin_place.name %></td>
         <td><%= admin_place.phone %></td>
         <td><%= admin_place.lng %></td>
         <td><%= admin_place.lat %></td>
-        <td><%= link_to 'Show', admin_place %></td>
+        <td><%= link_to 'Show', [:admin, admin_place] %></td>
         <td><%= link_to 'Edit', edit_admin_place_path(admin_place) %></td>
-        <td><%= link_to 'Destroy', admin_place, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', [:admin, admin_place], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

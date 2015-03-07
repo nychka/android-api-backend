@@ -1,14 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AndroidApi</title>
+  <title><%= 'Android API' %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+<!--[if lt IE 7]>
+  <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
 
-<%= yield %>
+  <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+           <%= link_to 'Android API', root_path, :class => 'navbar-brand' %>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+             <li class="<%= current_page?(:admin_users) ? 'active' : '' %>"><%= link_to(:Users, admin_users_path) %></li>
+            <li class="<%= current_page?(:admin_ads) ? 'active' : '' %>"><%= link_to(:Ads, admin_ads_path) %></li>
+            <li class="<%= current_page?(:admin_places) ? 'active' : '' %>"><%= link_to(:Places, admin_places_path) %></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+              <% if current_admin %>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                <%= current_admin.email %> <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <!-- li><a href="#" class="btn btn-link"><%= t('settings')%></a></li -->
+                  <li class="divider"></li>
+                  <li><%= link_to t("log_out"), destroy_admin_session_path, method: :delete, class: "btn btn-link" %></li>
+                </ul>
+              </li>
+              <% else %>
+              <li><%= link_to t("sign_in"), new_admin_session_path %></li>
+              <% end %>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
 
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <%= render partial: "shared/flash_messages", flash: flash %> 
+      <%= yield %>
+    </div>
+  </div>
 </body>
 </html>
+

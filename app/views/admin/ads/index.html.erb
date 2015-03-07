@@ -1,4 +1,4 @@
-<h1>Listing admin_ads</h1>
+<h1>Listing ads</h1>
 
 <table>
   <thead>
@@ -12,15 +12,15 @@
   </thead>
 
   <tbody>
-    <% @admin_ads.each do |admin_ad| %>
+    <% @ads.each do |ad| %>
       <tr>
-        <td><%= admin_ad.name %></td>
-        <td><%= admin_ad.price %></td>
-        <td><%= admin_ad.place_id %></td>
-        <td><%= admin_ad.photo %></td>
-        <td><%= link_to 'Show', admin_ad %></td>
-        <td><%= link_to 'Edit', edit_admin_ad_path(admin_ad) %></td>
-        <td><%= link_to 'Destroy', admin_ad, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= ad.name %></td>
+        <td><%= ad.price %></td>
+        <td><%= ad.place_id %></td>
+        <td><%= ad.photo %></td>
+        <td><%= link_to 'Show', [:admin, ad] %></td>
+        <td><%= link_to 'Edit', edit_admin_ad_path(ad) %></td>
+        <td><%= link_to 'Destroy', [:admin, ad], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
