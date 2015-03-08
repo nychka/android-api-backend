@@ -39,6 +39,8 @@ group :test, :development do
   gem 'capistrano', '~> 3.3.0'
   gem 'capistrano-bundler', '~> 1.1.2'
   gem 'capistrano-rvm'
+  gem 'capistrano-passenger'
+  gem 'capistrano-rails'
   gem 'simplecov', :require => false
 end
 group :production, :staging do
