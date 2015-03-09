@@ -1,8 +1,10 @@
 require 'simplecov'
-SimpleCov.start do
-  add_group "Models", "app/models"
-  add_group "Controllers", "app/controllers"
-  add_group "Social Networks", "app/social_networks"
+if ENV['COVERAGE']
+  SimpleCov.start do
+    add_group "Models", "app/models"
+    add_group "Controllers", "app/controllers"
+    add_group "Social Networks", "app/social_networks"
+  end
 end
 
 ENV['RAILS_ENV'] ||= 'test'

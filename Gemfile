@@ -7,6 +7,8 @@ gem 'rails', '4.1.6'
 gem 'uglifier', '>= 1.3.0'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
+gem 'jquery-turbolinks'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -19,6 +21,7 @@ gem 'devise'
 gem 'simple_form'
 gem 'will_paginate-bootstrap'
 gem 'rdiscount'
+gem 'rails4-autocomplete'
 
 group :test, :development do
   gem 'better_errors'

@@ -1,6 +1,7 @@
 class Admin::PlacesController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_place, only: [:show, :edit, :update, :destroy]
+  autocomplete :place, :name, full: true, extra_data: [:phone, :lat, :lng]
 
   # GET /admin/places
   def index

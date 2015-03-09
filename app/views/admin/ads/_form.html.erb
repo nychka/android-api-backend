@@ -10,9 +10,20 @@
       </ul>
     </div>
   <% end %>
+  <% if @place and @place.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@place.errors.count, "error") %> prohibited this admin_place from being saved:</h2>
+
+      <ul>
+      <% @place.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
+    <%= f.label :product_name %><br>
     <%= f.text_field :name %>
   </div>
   <div class="field">
@@ -20,13 +31,33 @@
     <%= f.text_field :price %>
   </div>
   <div class="field">
-    <%= f.label :place_id %><br>
-    <%= f.number_field :place_id %>
-  </div>
-  <div class="field">
     <%= f.label :photo %><br>
     <%= f.text_field :photo %>
   </div>
+  <div class="field">
+    <%= f.hidden_field :place_id %>
+  </div>
+  <%= fields_for :place do |b| %>
+    <div class="field">
+      <%= b.label :place %><br>
+      <%= b.autocomplete_field :name, autocomplete_place_name_admin_places_path,
+       id_element: '#ad_place_id', update_elements: { phone: '#place_phone', lat: '#place_lat', lng: '#place_lng' },
+       "data-autocomplete-label" => "Place doesn't exist - create one" %>
+    </div>
+    <div class="field">
+      <%= b.label :phone %><br>
+      <%= b.text_field :phone, class: 'extra_place_element' %>
+    </div>
+    <div class="field">
+      <%= b.label :lat %><br>
+      <%= b.text_field :lat, class: 'extra_place_element' %>
+    </div>
+    <div class="field">
+      <%= b.label :lng %><br>
+      <%= b.text_field :lng, class: 'extra_place_element' %>
+    </div>
+  <% end %>
+  
   <div class="actions">
     <%= f.submit %>
   </div>

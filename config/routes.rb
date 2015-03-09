@@ -3,7 +3,10 @@ Rails.application.routes.draw do
   devise_for :admins, controllers: { sessions: "admins/sessions", registrations: "admins/registrations", passwords: "admins/passwords" }
 
   namespace :admin do
-    resources :places, :ads, :users
+    resources :ads, :users
+    resources :places do
+      get :autocomplete_place_name, :on => :collection
+    end
     get 'welcome/index'
   end
 
