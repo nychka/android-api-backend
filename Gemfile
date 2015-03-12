@@ -28,16 +28,14 @@ group :test, :development do
   gem 'debugger'
   gem 'database_cleaner'  
   gem 'factory_girl_rails', '>= 4.2.0'
-  gem 'capybara', '>= 2.0.3'
-  gem 'capybara-webkit'
-  gem 'selenium-webdriver'
-  gem 'cucumber-rails', :require => false
+  #gem 'capybara', '>= 2.0.3'
+  #gem 'capybara-webkit'
+  #gem 'selenium-webdriver'
+  #gem 'cucumber-rails', :require => false
   gem 'faker'
-  gem 'spork-rails'
-  gem 'guard-spork'
   gem 'shoulda'
   gem 'mocha'
-  gem 'meta_request'
+  #gem 'meta_request'
   gem 'binding_of_caller'
   gem 'capistrano', '~> 3.3.0'
   gem 'capistrano-bundler', '~> 1.1.2'
@@ -45,6 +43,8 @@ group :test, :development do
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
   gem 'simplecov', :require => false
+  gem 'spring'
+  gem 'spring-commands-testunit'
 end
 group :production, :staging do
   gem 'rails_12factor'
