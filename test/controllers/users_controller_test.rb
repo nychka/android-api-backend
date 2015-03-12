@@ -109,10 +109,10 @@ class UsersControllerTest < ActionController::TestCase
   end
   test "show user with extra ads" do
     jack = create(:user)
-    ad = create(:ad)
-    ad_json = { product_name: ad.name, price: ad.price, photo: ad.photo, place: ad.place.name, phone: ad.place.phone } # to rabl
     susana = create(:user, first_name: 'Susana')
-
+    ad = create(:ad)
+    place = ad.place
+    ad_json = Rabl.render(ad, 'ads/ad', view_path: 'app/views', format: :hash)
     get :show, { access_token: jack.access_token, id: susana.id }
     assert_response 200
     body = JSON.parse(response.body).deep_symbolize_keys
@@ -124,7 +124,7 @@ class UsersControllerTest < ActionController::TestCase
   test "show user with no access_token" do
     jack = create(:user)
     ad = create(:ad)
-    ad_json = ad_json = { product_name: ad.name, price: ad.price, photo: ad.photo, place: ad.place.name, phone: ad.place.phone } # to rabl
+    ad_json = Rabl.render(ad, 'ads/ad', view_path: 'app/views', format: :hash)
     susana = create(:user, first_name: 'Susana')
 
     get :show, { access_token: jack.access_token, id: susana.id }
