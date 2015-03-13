@@ -5,6 +5,7 @@
     <tr>
       <th>Name</th>
       <th>Phone</th>
+      <th>Address</th>
       <th>Lng</th>
       <th>Lat</th>
       <th colspan="3"></th>
@@ -16,8 +17,9 @@
       <tr>
         <td><%= admin_place.name %></td>
         <td><%= admin_place.phone %></td>
-        <td><%= admin_place.lng %></td>
-        <td><%= admin_place.lat %></td>
+        <td><%= admin_place.address %></td>
+        <td><%= admin_place.longitude %></td>
+        <td><%= admin_place.latitude %></td>
         <td><%= link_to 'Show', [:admin, admin_place] %></td>
         <td><%= link_to 'Edit', edit_admin_place_path(admin_place) %></td>
         <td><%= link_to 'Destroy', [:admin, admin_place], method: :delete, data: { confirm: 'Are you sure?' } %></td>

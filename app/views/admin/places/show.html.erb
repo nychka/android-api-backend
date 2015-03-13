@@ -1,24 +1,48 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @place.name %>
-</p>
+<div class="pull-left">
+  <p>
+    <strong>Name:</strong>
+    <%= @place.name %>
+  </p>
 
-<p>
-  <strong>Phone:</strong>
-  <%= @place.phone %>
-</p>
+  <p>
+    <strong>Phone:</strong>
+    <%= @place.phone %>
+  </p>
 
-<p>
-  <strong>Lng:</strong>
-  <%= @place.lng %>
-</p>
+  <p>
+    <strong>Address:</strong>
+    <%= @place.address %>
+  </p>
 
-<p>
-  <strong>Lat:</strong>
-  <%= @place.lat %>
-</p>
+  <p>
+    <strong>Lng:</strong>
+    <%= @place.longitude %>
+  </p>
 
-<%= link_to 'Edit', edit_admin_place_path(@place) %> |
-<%= link_to 'Back', admin_places_path %>
+  <p>
+    <strong>Lat:</strong>
+    <%= @place.latitude %>
+  </p>
+
+  <h3>Nearby Locations</h3>
+
+  <ul>
+    <% for place in @place.nearbys(5) %>
+    <li><%= link_to place.address, [:admin, place] %> (<%= place.distance.round(2) %> kilometers)</li>
+    <% end %>
+  </ul>
+</div>
+
+<div class="pull-right">
+
+  <%= image_tag "https://maps.googleapis.com/maps/api/staticmap?&zoom=14&size=600x300&maptype=roadmap
+  &markers=color:blue%7Clabel:S%7C#{@place.latitude},#{@place.longitude}" %>
+
+</div>
+
+<div class="clear">
+  <%= link_to 'Edit', edit_admin_place_path(@place) %> |
+  <%= link_to 'Back', admin_places_path %>
+</div>

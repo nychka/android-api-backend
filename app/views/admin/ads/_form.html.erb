@@ -41,7 +41,7 @@
     <div class="field">
       <%= b.label :place %><br>
       <%= b.autocomplete_field :name, autocomplete_place_name_admin_places_path,
-       id_element: '#ad_place_id', update_elements: { phone: '#place_phone', lat: '#place_lat', lng: '#place_lng' },
+       id_element: '#ad_place_id', update_elements: { phone: '#place_phone', latitude: '#place_latitude', longitude: '#place_longitude' },
        "data-autocomplete-label" => "Place doesn't exist - create one" %>
     </div>
     <div class="field">
@@ -49,12 +49,12 @@
       <%= b.text_field :phone, class: 'extra_place_element' %>
     </div>
     <div class="field">
-      <%= b.label :lat %><br>
-      <%= b.text_field :lat, class: 'extra_place_element' %>
+      <%= b.label :latitude %><br>
+      <%= b.text_field :latitude, class: 'extra_place_element' %>
     </div>
     <div class="field">
-      <%= b.label :lng %><br>
-      <%= b.text_field :lng, class: 'extra_place_element' %>
+      <%= b.label :longitude %><br>
+      <%= b.text_field :longitude, class: 'extra_place_element' %>
     </div>
   <% end %>
   

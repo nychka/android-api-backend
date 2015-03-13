@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150307100119) do
+ActiveRecord::Schema.define(version: 20150313204743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,11 +61,14 @@ ActiveRecord::Schema.define(version: 20150307100119) do
   create_table "places", force: true do |t|
     t.string   "name"
     t.string   "phone"
-    t.decimal  "lng",        precision: 10, scale: 6
-    t.decimal  "lat",        precision: 10, scale: 6
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "address"
   end
+
+  add_index "places", ["latitude", "longitude"], name: "place_coordinates", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "first_name"
@@ -81,9 +84,13 @@ ActiveRecord::Schema.define(version: 20150307100119) do
     t.integer  "gender",       limit: 2
     t.date     "bdate"
     t.string   "links",                  array: true
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "phone"
   end
 
   add_index "users", ["access_token"], name: "index_users_on_access_token", unique: true, using: :btree
   add_index "users", ["city"], name: "index_users_on_city", using: :btree
+  add_index "users", ["latitude", "longitude"], name: "user_coordinates", using: :btree
 
 end

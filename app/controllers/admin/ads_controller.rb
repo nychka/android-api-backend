@@ -66,6 +66,6 @@ class Admin::AdsController < ApplicationController
       params.require(:ad).permit(:name, :price, :photo, :place_id)
     end
     def place_params
-      params.require(:place).permit(:name, :phone, :lat, :lng)
+      params.require(:place).permit(:name, :phone, :address, :latitude, :longitude)
     end 
 end

@@ -22,6 +22,7 @@ gem 'simple_form'
 gem 'will_paginate-bootstrap'
 gem 'rdiscount'
 gem 'rails4-autocomplete'
+gem 'geocoder'
 
 group :test, :development do
   gem 'better_errors'

@@ -42,7 +42,7 @@ class AuthControllerTest < ActionController::TestCase
     get :index, { provider: auth.provider, auth_token: auth.auth_token }
     assert_response 200
     body = JSON.parse(response.body).deep_symbolize_keys
-    user_as_json = user.as_json.symbolize_keys.delete_if{ |item| item =~ /_at$/ }
+    user_as_json = Rabl.render(user, 'users/user', view_path: 'app/views', format: :hash)
     received_user = body[:data][:user]
     assert_equal 200, body[:status]
     #assert_equal 100, body[:code], "successfully authorized"

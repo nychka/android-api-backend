@@ -12,6 +12,9 @@ class User < ActiveRecord::Base
 
   after_create :generate_access_token!
 
+  geocoded_by :city
+  before_create :geocode, :unless => lambda{|obj| obj.city.blank? }
+
   class << self
   	def authorize_by(params)
 	  	if user = params[:access_token].present? ? User.find_by(params) : Authentication.find_by(params).try(:user)

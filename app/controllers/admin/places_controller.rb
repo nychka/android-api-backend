@@ -1,7 +1,7 @@
 class Admin::PlacesController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_place, only: [:show, :edit, :update, :destroy]
-  autocomplete :place, :name, full: true, extra_data: [:phone, :lat, :lng]
+  autocomplete :place, :name, full: true, extra_data: [:phone, :address, :latitude, :longitude]
 
   # GET /admin/places
   def index
@@ -55,6 +55,6 @@ class Admin::PlacesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def place_params
-      params.require(:place).permit(:name, :phone, :lng, :lat)
+      params.require(:place).permit(:name, :phone, :address, :longitude, :latitude)
     end
 end
