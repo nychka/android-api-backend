@@ -1,4 +1,8 @@
-## 0.1.1 / Unrealesed
+## 0.1.2 / Unrealesed
+### API
+- show ad of the nearest place from user
+
+## 0.1.1 / 14.03.2015
 ### API
 - add phone, latitude and longitude for user
 - add latitude and longitude for ad

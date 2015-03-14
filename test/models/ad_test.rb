@@ -26,12 +26,6 @@ class AdTest < ActiveSupport::TestCase
     ad.valid?
     assert_match /can't be blank/, ad.errors[:place_id].join, "ad is not valid: place_id can't be blank"
   end
-  # test "as_api" do
-  #   place = create(:place, name: 'Арсен')
-  #   ad = create(:ad, name: 'корзинка', place_id: place.id)
-  #   as_api = { product_name: ad.name, price: ad.price, photo: ad.photo, place: place.name, phone: place.phone }
-  #   assert_equal as_api, ad.as_api
-  # end
   test "respond to random" do
     assert_respond_to Ad, :random
   end
