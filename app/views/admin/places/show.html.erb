@@ -26,13 +26,14 @@
     <%= @place.latitude %>
   </p>
 
-  <h3>Nearby Locations</h3>
-
-  <ul>
-    <% for place in @place.nearbys(5) %>
-    <li><%= link_to place.address, [:admin, place] %> (<%= place.distance.round(2) %> kilometers)</li>
-    <% end %>
-  </ul>
+  <% if @place.nearbys && !@place.nearbys.empty? %>
+    <h3>Nearby Locations</h3>
+    <ul>
+      <% @place.nearbys.each do |place| %>
+        <li><%= link_to place.address, [:admin, place] %> (<%= place.distance.round(2) %> kilometers)</li>
+      <% end %>
+    </ul>
+  <% end %>
 </div>
 
 <div class="pull-right">
