@@ -23,12 +23,12 @@ class UsersControllerTest < ActionController::TestCase
   test "GET /users/:id" do
   	jack = create(:user)
   	susana = create(:user, first_name: 'Susana')
-
+    susana_json = rabl_render(susana, 'users/guest_user', current_user: jack)
   	get :show, { access_token: jack.access_token, id: susana.id }
   	assert_response 200
   	body = JSON.parse(response.body).deep_symbolize_keys
   	assert_equal 200, body[:status]
-  	assert_equal susana.first_name, body[:data][:user][:first_name]
+  	assert_equal susana_json, body[:data][:user]
   end
 	test "POST /users" do
 		user_params = attributes_for(:social_user)
@@ -44,10 +44,10 @@ class UsersControllerTest < ActionController::TestCase
 		put :update, { access_token: user.access_token, user: user_params }
 		assert_response 200
 		user.reload
+    user_json = rabl_render(user, 'users/user')
 		body = JSON.parse(response.body).deep_symbolize_keys
 		assert_equal 200, body[:status]
-		#assert_equal 110, body[:code]
-		assert_equal user.first_name, body[:data][:user][:first_name]
+		assert_equal user_json, body[:data][:user]
 	end
   test "user updates links" do
     user = create(:user, first_name: 'Rudolf')
@@ -57,7 +57,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_response 200
     body = JSON.parse(response.body).deep_symbolize_keys
     assert_equal 200, body[:status]
-    #assert_equal 110, body[:code]
     assert_equal links, body[:data][:user][:links]
   end
   test "update user with access_token inside user" do
@@ -66,10 +65,11 @@ class UsersControllerTest < ActionController::TestCase
     put :update, { user: user.attributes }
     assert_response 200
     user.reload
+    user_json = rabl_render(user, 'users/user')
     body = JSON.parse(response.body).deep_symbolize_keys
     assert_equal 200, body[:status]
-    #assert_equal 110, body[:code]
     assert_equal 'Petro', body[:data][:user][:first_name]
+    assert_equal user_json, body[:data][:user]
   end
 	test "trying to update as unauthorized user" do
 		put :update, { access_token: nil, user: attributes_for(:social_user) }
@@ -85,7 +85,6 @@ class UsersControllerTest < ActionController::TestCase
 		assert_response 422
 		body = JSON.parse(response.body).deep_symbolize_keys
 		assert_equal 422, body[:status]
-		#assert_equal 104, body[:code]
 		assert_equal "can't be blank", body[:data][:errors][:email].join
 	end
   test "update user with required params" do
@@ -95,7 +94,6 @@ class UsersControllerTest < ActionController::TestCase
     put :update, { user: user_params }
     body = JSON.parse(response.body).deep_symbolize_keys
     assert_equal 422, body[:status]
-    #assert_equal 104, body[:code]
     assert_equal 1, body[:data][:errors].count
     assert_equal "is not included in the list", body[:data][:errors][:gender].join
   end
@@ -112,27 +110,29 @@ class UsersControllerTest < ActionController::TestCase
     susana = create(:user, first_name: 'Susana')
     ad = create(:ad)
     place = ad.place
-    ad_json = Rabl.render(ad, 'ads/ad', view_path: 'app/views', format: :hash)
+    ad_json = rabl_render(ad, 'ads/ad')
+    susana_json = rabl_render(susana, 'users/guest_user', current_user: jack)
     get :show, { access_token: jack.access_token, id: susana.id }
     assert_response 200
     body = JSON.parse(response.body).deep_symbolize_keys
     assert_equal 200, body[:status]
-    assert_equal susana.first_name, body[:data][:user][:first_name]
+    assert_equal susana_json, body[:data][:user]
     assert body[:data][:ads].kind_of? Array
     assert_equal ad_json, body[:data][:ads].first
   end
   test "show user with no access_token" do
     jack = create(:user)
-    ad = create(:ad)
-    ad_json = Rabl.render(ad, 'ads/ad', view_path: 'app/views', format: :hash)
     susana = create(:user, first_name: 'Susana')
+    ad = create(:ad)
+    ad_json = rabl_render(ad, 'ads/ad')
+    susana_json = rabl_render(susana, 'users/guest_user', current_user: jack)
 
     get :show, { access_token: jack.access_token, id: susana.id }
     assert_response 200
     body = JSON.parse(response.body).deep_symbolize_keys
     assert_equal 200, body[:status]
     assert_nil body[:data][:user][:access_token]
-    assert_equal susana.first_name, body[:data][:user][:first_name]
+    assert_equal susana_json, body[:data][:user]
     assert body[:data][:ads].kind_of? Array
     assert_equal ad_json, body[:data][:ads].first
   end

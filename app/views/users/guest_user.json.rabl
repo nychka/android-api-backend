@@ -1,6 +1,6 @@
 object @user
 
-attributes :id, :first_name, :last_name, :email, :photo, :city, :gender, :links, :age
+attributes :id, :first_name, :last_name, :email, :photo, :city, :gender, :links, :age, :phone, :longitude, :latitude
 
 glue(@user, :if => lambda{ |user| user == current_user }) do |user|
   attribute :access_token

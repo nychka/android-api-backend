@@ -1,10 +1,7 @@
 ## 0.1.1 / Unrealesed
 ### API
-- add phone, lng, lat for user
-
-### Admin
-- join ads and places
-- add authentications for users
+- add phone, latitude and longitude for user
+- add latitude and longitude for ad
 
 ## 0.1.0 / 7.03.2015
 ### Admin

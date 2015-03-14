@@ -13,7 +13,8 @@ class User < ActiveRecord::Base
   after_create :generate_access_token!
 
   geocoded_by :city
-  before_create :geocode, :unless => lambda{|obj| obj.city.blank? }
+  before_create    :geocode, :unless => lambda{ |user| user.city.blank? }
+  after_validation :geocode, :if => lambda{ |user| user.persisted? and user.city_changed? }
 
   class << self
   	def authorize_by(params)

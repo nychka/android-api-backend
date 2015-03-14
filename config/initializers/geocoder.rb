@@ -19,3 +19,19 @@ Geocoder.configure(
    :units     => :km,       # :km for kilometers or :mi for miles
   # :distances => :linear    # :spherical or :linear
 )
+if Rails.env.test? or Rails.env.development?
+  Geocoder.configure(:lookup => :test)
+
+  Geocoder::Lookup::Test.set_default_stub(
+    [
+       {
+        'latitude'     => 49.839683,
+        'longitude'    => 24.029717,
+        'address'      => 'Lviv, Ukraine',
+        'state'        => 'Lviv',
+        'country'      => 'Ukraine',
+        'country_code' => 'UA'
+      }
+    ]
+  )
+end
