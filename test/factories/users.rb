@@ -24,4 +24,9 @@ FactoryGirl.define do
 		links { Settings.social_networks.map{|item|  Faker::Internet.url } }
 		bdate { 20.years.ago.to_date }
 	end
+	factory :geo_user, class: User, parent: :user do
+		latitude  49.8385295
+		longitude 24.0548934
+		city      nil
+	end
 end

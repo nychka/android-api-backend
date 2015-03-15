@@ -136,17 +136,14 @@ class UsersControllerTest < ActionController::TestCase
     assert body[:data][:ads].kind_of? Array
     assert_equal ad_json, body[:data][:ads].first
   end
-  test "show ad in user's radius" do
-    jack = create(:user, latitude: 49.8385295, longitude: 24.0548934, city: nil)
+  test "show ad within user's radius" do
+    jack = create(:geo_user)
     susana = create(:user, first_name: 'Susana')
     susana_json = rabl_render(susana, 'users/guest_user', current_user: jack)
-    place = create(:place, latitude: 49.8395979, longitude: 24.051139) # 0.294 km from user
+    place = create(:geo_place)
     create_list(:ad, 10)
     ad = create(:ad, place_id: place.id)
     ad_json = rabl_render(ad, 'ads/ad')
-
-    distance = jack.distance_to(place)
-    assert_equal 0.294, distance.round(3)
 
     get :show, { access_token: jack.access_token, id: susana.id }
     assert_response 200

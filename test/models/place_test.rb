@@ -26,4 +26,26 @@ class PlaceTest < ActiveSupport::TestCase
     place.valid?
     assert_match /can't be blank/, place.errors[:phone].join, "place is not valid: phone can't be blank"
   end
+  test "scope with_ads" do
+    place = create(:place)
+    assert_equal 0, Place.with_ads.length
+    create(:ad, place_id: place.id)
+    assert_equal 1, Place.with_ads.length
+    assert place, Place.with_ads.first
+  end
+  test "scope within_radius" do
+    user = create(:geo_user)
+    place = create(:geo_place)
+    distance = user.distance_to(place)
+    assert_equal 0.294, distance.round(3)
+    assert_equal 0, Place.with_ads.length
+    create(:ad, place_id: place.id)
+    assert_equal place, Place.with_ads.first
+    place_near_user = Place.near(user, 0.3)
+    assert_equal 1, place_near_user.length
+    assert_equal place, place_near_user.first
+    places_within_radius = Place.within_radius(user, 0.3) # default radius equals 0.5
+    assert_equal 1, places_within_radius.length
+    assert_equal place, places_within_radius.first
+  end
 end

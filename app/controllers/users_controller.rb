@@ -5,7 +5,8 @@ class UsersController < ApiController
 
   def show
     if @user
-      render '/users/show', locals: { status: 200, user: @user, ads: Ad.random }, status: :ok
+      ads = AdGenerator.generate(current_user: @current_user)
+      render '/users/show', locals: { status: 200, user: @user, ads: ads }, status: :ok
     else
       render json: { status: 404, error_msg: 'user not found'}, status: :not_found
     end

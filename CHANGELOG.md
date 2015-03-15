@@ -1,4 +1,11 @@
-## 0.1.2 / Unrealesed
+## 0.1.3 / Unrealesed
+### API
+- show the nearest users
+- add user to bookmarks
+- show bookmarked users
+- remove user from bookmarks
+
+## 0.1.2 / 15.03.2015
 ### API
 - show ad of the nearest place from user
 
