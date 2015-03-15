@@ -100,4 +100,15 @@ class UserTest < ActiveSupport::TestCase
     auth.reload
     assert_equal auth, Authentication.find_by(params)
   end
+  test "get nearby users" do
+    user = create(:geo_user)
+    list = create_list(:user, 5) # distance_to user 1.810 km
+    nearby_users = User.nearby(user)
+    assert_equal 0, nearby_users.length
+    place = attributes_for(:geo_place) # distance_to user 0.294 km
+    nearby_user = create(:geo_user, latitude: place[:latitude], longitude: place[:longitude])
+    nearby_users = User.nearby(user)
+    assert_equal 1, nearby_users.length
+    assert_equal nearby_user, nearby_users.first
+  end
 end

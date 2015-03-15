@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
   before_create    :geocode, :unless => lambda{ |user| user.city.blank? }
   after_validation :geocode, :if => lambda{ |user| user.persisted? and user.city_changed? }
 
+  scope :nearby, ->(user){ self.near(user, Settings.radius_of_users).where("id != ?", user.id) }
+
   class << self
   	def authorize_by(params)
 	  	if user = params[:access_token].present? ? User.find_by(params) : Authentication.find_by(params).try(:user)

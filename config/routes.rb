@@ -20,12 +20,14 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'admin/welcome#index'
 
-  match 'auth', to: 'auth#index', via: [:get, :post]
-  match 'profile', to: 'profile#index', via: :get
-  match 'users', to: 'users#update', via: :put
-  match 'users', to: 'users#create', via: :post
-  match 'users/:id', to: 'users#show', via: :get
+  match 'auth',          to: 'auth#index',    via: [:get, :post]
+  match 'profile',       to: 'profile#index', via: :get
+  match 'users',         to: 'users#update',  via: :put
+  match 'users',         to: 'users#create',  via: :post
 
+  resources :users, only: [:nearby, :show] do
+    get 'nearby', on: :collection 
+  end
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

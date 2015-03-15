@@ -1,5 +1,5 @@
 class UsersController < ApiController
-  before_action :authorize!, only: :show
+  before_action :authorize!, only: [:show, :nearby]
   before_action :authorize_with_settings, only: :update
   before_action :set_user, only: :show
 
@@ -15,7 +15,6 @@ class UsersController < ApiController
     if user = User.find_by(email: user_params[:email])
       user.add_social_network authentication_params
       render '/users/create', locals: { status: 200, user: @user }, status: :ok and return
-      #render json: { status: 200, data: { user: user }, code: 103 }, status: :ok and return
     end
     user = User.new(user_params)
     if user.save
@@ -30,9 +29,17 @@ class UsersController < ApiController
     @current_user.attributes = user_params
     if @current_user.save
       render '/users/create', locals: { status: 200, user: @current_user }, status: :ok
-      #render json: { status: 200, data: { user: @current_user.as_api }, code: 110 }, status: :ok
     else
       render json: { status: 422, data: { user: user_params, errors: @current_user.errors.messages }, code: 104 }, status: :unprocessable_entity
+    end
+  end
+
+  def nearby
+    if @current_user.geocoded?
+      users = User.nearby(@current_user)
+      render '/users/nearby', locals: { status: 200, users: users }, status: :ok
+    else
+      render json: { status: 405, error_msg: 'user must provide current coordinates: latitude and longitude' }, status: :method_not_allowed
     end
   end
 
@@ -48,7 +55,7 @@ class UsersController < ApiController
     @user = User.find(params[:id]) rescue nil
   end
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate, :links => [])
+    params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate, :longitude, :latitude, :phone, :links => [])
   end
   def authentication_params
     { provider: params[:provider], auth_token: params[:auth_token] }

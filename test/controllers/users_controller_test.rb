@@ -23,7 +23,7 @@ class UsersControllerTest < ActionController::TestCase
   test "GET /users/:id" do
   	jack = create(:user)
   	susana = create(:user, first_name: 'Susana')
-    susana_json = rabl_render(susana, 'users/guest_user', current_user: jack)
+    susana_json = rabl_render(susana, 'users/guest_user')
   	get :show, { access_token: jack.access_token, id: susana.id }
   	assert_response 200
   	body = JSON.parse(response.body).deep_symbolize_keys
@@ -36,7 +36,6 @@ class UsersControllerTest < ActionController::TestCase
 		assert_response 201
 		body = JSON.parse(response.body).deep_symbolize_keys
 		assert_equal 201, body[:status]
-		#assert_equal 101, body[:code], "successfully registered"
 	end
 	test "PUT /users" do
 		user = create(:user, first_name: 'Yaroslav')
@@ -111,7 +110,7 @@ class UsersControllerTest < ActionController::TestCase
     ad = create(:ad)
     place = ad.place
     ad_json = rabl_render(ad, 'ads/ad')
-    susana_json = rabl_render(susana, 'users/guest_user', current_user: jack)
+    susana_json = rabl_render(susana, 'users/guest_user')
     get :show, { access_token: jack.access_token, id: susana.id }
     assert_response 200
     body = JSON.parse(response.body).deep_symbolize_keys
@@ -125,7 +124,7 @@ class UsersControllerTest < ActionController::TestCase
     susana = create(:user, first_name: 'Susana')
     ad = create(:ad)
     ad_json = rabl_render(ad, 'ads/ad')
-    susana_json = rabl_render(susana, 'users/guest_user', current_user: jack)
+    susana_json = rabl_render(susana, 'users/guest_user')
 
     get :show, { access_token: jack.access_token, id: susana.id }
     assert_response 200
@@ -139,7 +138,7 @@ class UsersControllerTest < ActionController::TestCase
   test "show ad within user's radius" do
     jack = create(:geo_user)
     susana = create(:user, first_name: 'Susana')
-    susana_json = rabl_render(susana, 'users/guest_user', current_user: jack)
+    susana_json = rabl_render(susana, 'users/guest_user')
     place = create(:geo_place)
     create_list(:ad, 10)
     ad = create(:ad, place_id: place.id)
@@ -151,5 +150,39 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal 200, body[:status]
     assert_equal susana_json, body[:data][:user]
     assert_equal ad_json, body[:data][:ads].first
+  end
+  test "user tries to get nearby users not being geocoded" do
+    user = create(:user, city: nil)
+    get :nearby, { access_token: user.access_token }
+    assert_response 405
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 405, body[:status]
+    assert_equal "user must provide current coordinates: latitude and longitude", body[:error_msg]
+  end
+  test "user gets nearby users" do
+    user = create(:geo_user)
+    geo = attributes_for(:geo_place)
+    user_list = create_list(:user, 3)
+    near_users = create_list(:geo_user, 5, latitude: geo[:latitude], longitude: geo[:longitude])
+    users_json = rabl_render(near_users, 'users/nearby')
+
+    get :nearby, { access_token: user.access_token }
+    assert_response 200
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    assert users_json, body[:data][:users]
+  end
+  test "user updates latitude and longitude" do
+    user = create(:user, city: nil)
+    geo_params = attributes_for(:geo_user)
+    user_params = { latitude: geo_params[:latitude], longitude: geo_params[:longitude] }
+    put :update, { access_token: user.access_token, user: user_params }
+    assert_response 200
+    user.reload
+    assert user.geocoded?
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    assert_equal  user.latitude, body[:data][:user][:latitude]
+    assert_equal  user.longitude, body[:data][:user][:longitude]
   end
 end
