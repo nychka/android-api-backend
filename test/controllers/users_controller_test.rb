@@ -172,6 +172,36 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal 200, body[:status]
     assert users_json, body[:data][:users]
   end
+  test "user gets nearby user by lotitude and langitude" do
+    user = create(:user, city: nil)
+    geo = attributes_for(:geo_place)
+    near_users = create_list(:geo_user, 5, latitude: geo[:latitude], longitude: geo[:longitude])
+    users_json = rabl_render(near_users, 'users/nearby')
+
+    get :nearby, { access_token: user.access_token, latitude: geo[:latitude], longitude: geo[:longitude] }
+    assert_response 200
+    body = JSON.parse(response.body).deep_symbolize_keys
+    user.reload
+    assert_equal 200, body[:status]
+    assert users_json, body[:data][:users]
+    assert_equal geo[:latitude], user.latitude
+    assert_equal geo[:longitude], user.longitude
+  end
+  test "user gets ad when search for nearby users" do
+    user = create(:geo_user)
+    geo_place = create(:geo_place)
+    ad = create(:ad, place_id: geo_place.id)
+    near_users = create_list(:geo_user, 5, latitude: geo_place.latitude, longitude: geo_place.longitude)
+    users_json = rabl_render(near_users, 'users/nearby')
+    ad_json = rabl_render(ad, 'ads/ad')
+
+    get :nearby, { access_token: user.access_token }
+    assert_response 200
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    assert users_json, body[:data][:users]
+    assert_equal ad_json, body[:data][:ads].first
+  end
   test "user updates latitude and longitude" do
     user = create(:user, city: nil)
     geo_params = attributes_for(:geo_user)

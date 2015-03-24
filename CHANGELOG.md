@@ -1,8 +1,13 @@
-## 0.1.3 / Unrealesed
+## 0.1.4 / Unrealesed
 ### API
 - add user to bookmarks
 - show bookmarked users
 - remove user from bookmarks
+
+## 0.1.3 / 24.03.2015
+### API
+- search nearby user by latitude and longitude
+- show ads alongside nearby users
 
 ## 0.1.2 / 15.03.2015
 ### API

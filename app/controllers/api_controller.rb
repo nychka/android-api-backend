@@ -25,6 +25,11 @@ class ApiController < ActionController::Base
       render json: { status: 400, error_msg: 'Bad request. Please, make sure to add headers for your request: Content-Type: application/json and Accept: application/json' }, status: 400
     end
   end
+  def refresh_location
+    if params[:longitude] && params[:latitude]
+      @current_user.update(latitude: params[:latitude], longitude: params[:longitude])
+    end
+  end
 
   private 
 

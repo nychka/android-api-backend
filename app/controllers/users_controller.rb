@@ -2,11 +2,12 @@ class UsersController < ApiController
   before_action :authorize!, only: [:show, :nearby]
   before_action :authorize_with_settings, only: :update
   before_action :set_user, only: :show
+  before_action :refresh_location, only: :nearby
+  before_action :generate_ads, only: [:show, :nearby]
 
   def show
     if @user
-      ads = AdGenerator.generate(current_user: @current_user)
-      render '/users/show', locals: { status: 200, user: @user, ads: ads }, status: :ok
+      render '/users/show', locals: { status: 200, user: @user, ads: @ads }, status: :ok
     else
       render json: { status: 404, error_msg: 'user not found'}, status: :not_found
     end
@@ -37,13 +38,16 @@ class UsersController < ApiController
   def nearby
     if @current_user.geocoded?
       users = User.nearby(@current_user)
-      render '/users/nearby', locals: { status: 200, users: users }, status: :ok
+      render '/users/nearby', locals: { status: 200, users: users, ads: @ads }, status: :ok
     else
       render json: { status: 405, error_msg: 'user must provide current coordinates: latitude and longitude' }, status: :method_not_allowed
     end
   end
 
   private
+  def generate_ads
+    @ads = AdGenerator.generate(current_user: @current_user)
+  end
   def authorize_with_settings
     settings = {}
     if params[:user] && params[:user][:access_token]
