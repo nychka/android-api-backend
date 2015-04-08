@@ -1,24 +1,23 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @ad.name %>
-</p>
+<div class="">
+  <%= image_tag(@ad.photo, size: '200x200', vspace: 10) %><br />
+  <p>
+    <strong>Name:</strong>
+    <%= @ad.name %>
+  </p>
 
-<p>
-  <strong>Price:</strong>
-  <%= @ad.price %>
-</p>
+  <p>
+    <strong>Price:</strong>
+    <%= @ad.price %>
+  </p>
 
-<p>
-  <strong>Place:</strong>
-  <%= @ad.place_id %>
-</p>
+  <p>
+    <strong>Place:</strong>
+    <%= @ad.place_id %>
+  </p>
+</div>
 
-<p>
-  <strong>Photo:</strong>
-  <%= @ad.photo %>
-</p>
 
 <%= link_to 'Edit', edit_admin_ad_path(@ad) %> |
 <%= link_to 'Back', admin_ads_path %>

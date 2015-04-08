@@ -1,0 +1,12 @@
+<div class="ad-wrapper">
+  <div class="controls">
+    <%= link_to '', edit_admin_ad_path(ad), class: 'glyphicon glyphicon-edit edit control-item' %>
+    <%= link_to '', [:admin, ad], method: :delete, data: { confirm: 'Are you sure?' }, class: 'glyphicon glyphicon-remove control-item delete pull-right' %>
+  </div>
+  <div class="ad">
+    <%= image_tag(ad.photo, class: 'undercover') %>
+  </div>
+  <%= link_to  [:admin, ad] do %>
+    <div class="title"><%=  ad.name %></div>
+  <% end %>
+</div>
