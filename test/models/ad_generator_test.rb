@@ -1,13 +1,16 @@
 require 'test_helper'
 
 class AdGeneratorTest < ActiveSupport::TestCase
+  setup do
+    @ads_limit = Settings.ads_limit
+  end
   test "respond to generate_by" do
     assert_respond_to AdGenerator, :generate
   end
   test "generate_by" do
-    ads_list = create_list(:ad, 5)
+    ads_list = create_list(:ad, @ads_limit)
     ads = AdGenerator.generate
-    assert_equal Settings.ads_limit, ads.length
+    assert_equal @ads_limit, ads.length
   end
   test "limit ads" do
     ads_list = create_list(:ad, 5)
@@ -18,9 +21,9 @@ class AdGeneratorTest < ActiveSupport::TestCase
     user = create(:geo_user)
     place = create(:geo_place)
     create_list(:ad, 5)
-    ad_list = create_list(:ad, 2, place_id: place.id)
+    ad_list = create_list(:ad, @ads_limit, place_id: place.id)
     ads = AdGenerator.generate current_user: user
-    assert_equal Settings.ads_limit, ads.length
+    assert_equal @ads_limit, ads.length
     ads.each do |ad|
      assert ad_list.include? ad
     end
@@ -29,8 +32,8 @@ class AdGeneratorTest < ActiveSupport::TestCase
     user = create(:user)
     place = create(:place)
     create_list(:ad, 5)
-    ad_list = create_list(:ad, 2, place_id: place.id)
+    ad_list = create_list(:ad, @ads_limit, place_id: place.id)
     ads = AdGenerator.generate current_user: user
-    assert_equal Settings.ads_limit, ads.length
+    assert_equal @ads_limit, ads.length
   end
 end
