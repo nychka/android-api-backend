@@ -13,7 +13,7 @@ defaults: &defaults
     site: https://graph.facebook.com
     app_id: 1590518507829627
     app_secret: b6365344cb03d318431411494b68a699
-    access_token: CAAWmkXKqZBXsBAM41kULVjJ4nSYiYRgNo8AW8tfc0jRFPabQMcarHXpd4dciNPIioovqCO8ehb6hXq7besxPqTSGIUdOWmVeKG9JtMSdRRXbJZA4qLhJsTfgWQl5V1NqDCfNgDUkWgVlpL5BL1gF1TXK50qmgUL5r1EOPwwP9XCDK0QZCco
+    access_token: CAAWmkXKqZBXsBAG9sC5G02YmPRyTDnx7ozHqZBw8kNFBOqeTHhKKiK1q93dDDNEpZB8WwgOeyyN7qaXuzLV7Ncw7uZAcZBLeVYaZA3BnXm87CLYrZAlZApK8xPzom5QVjG8cXdFZB9apCog21IZATdY1MDaRQJmOZBs5cEnJHI6bfu7SK44XuUMsKcPtiVg15GzErBylZAw3lz81ygZDZD
     refresh_token:
     token_url: 
   gplus:

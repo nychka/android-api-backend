@@ -1,5 +1,5 @@
 class Facebook < SocialNetwork
-	attr_accessor :user_fields
+	attr_accessor :user_fields, :endpoint
 
 	def initialize(access_token, options = {})
 		super(access_token, options)
