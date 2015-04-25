@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 	has_many :authentications, dependent: :delete_all
   has_many :marks, dependent: :delete_all
-  has_many :marked_users, through: :marks, class: Mark#, foreign_key: 'marked_user_id'
+  has_many :marked_users, through: :marks, class_name: 'Mark'
 
   validates :first_name, 		presence: true, allow_blank: false
   validates :last_name,  		presence: true, allow_blank: false
@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
   # OPTIMIZE: 
   def marked_users
     marked_user_ids = self.marks.pluck(:marked_user_id)
-    User.find(marked_user_ids)
+    User.find(marked_user_ids) rescue []
   end
 
   class << self

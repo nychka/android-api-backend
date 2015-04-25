@@ -1,4 +1,6 @@
-## 0.1.4 / Unrealesed
+## 0.1.5 / Unrealesed
+
+## 0.1.4 / 25.04.2015
 ### API
 - add user to bookmarks
 - show bookmarked users
