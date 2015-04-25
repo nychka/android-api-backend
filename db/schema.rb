@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150313204743) do
+ActiveRecord::Schema.define(version: 20150425071140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,15 @@ ActiveRecord::Schema.define(version: 20150313204743) do
 
   add_index "authentications", ["provider", "auth_token"], name: "index_authentications_on_provider_and_auth_token", unique: true, using: :btree
   add_index "authentications", ["user_id"], name: "index_authentications_on_user_id", using: :btree
+
+  create_table "marks", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "marked_user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "marks", ["user_id", "marked_user_id"], name: "marked_user", using: :btree
 
   create_table "places", force: true do |t|
     t.string   "name"

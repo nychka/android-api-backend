@@ -5,6 +5,8 @@ class UserTest < ActiveSupport::TestCase
   should validate_presence_of(:last_name)
   should validate_presence_of(:email)
   should have_many(:authentications)
+  should have_many(:marks)
+  should have_many(:marked_users)
 
   test "user is not valid with no fields" do
     user = User.new
@@ -110,5 +112,23 @@ class UserTest < ActiveSupport::TestCase
     nearby_users = User.nearby(user)
     assert_equal 1, nearby_users.length
     assert_equal nearby_user, nearby_users.first
+  end
+  test "destroy dependent marked users" do
+    user = create(:user)
+    assert_difference 'Mark.count', 5 do
+      create_list(:mark, 5, user_id: user.id)
+    end
+    assert_equal 5, user.marks.count
+    user.destroy
+    assert_equal 0, Mark.count
+  end
+  test "marked_users" do
+    user = create(:user)
+    marked_users = create_list(:user, 2)
+    marks = marked_users.map do |marked_user|
+      create(:mark, user_id: user.id, marked_user_id: marked_user.id)
+    end
+    assert_equal marks, user.marks 
+    assert_equal marked_users, user.marked_users
   end
 end

@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 	has_many :authentications, dependent: :delete_all
+  has_many :marks, dependent: :delete_all
+  has_many :marked_users, through: :marks, class: Mark#, foreign_key: 'marked_user_id'
 
   validates :first_name, 		presence: true, allow_blank: false
   validates :last_name,  		presence: true, allow_blank: false
@@ -17,6 +19,12 @@ class User < ActiveRecord::Base
   after_validation :geocode, :if => lambda{ |user| user.persisted? and user.city_changed? }
 
   scope :nearby, ->(user){ self.near(user, Settings.radius_of_users).where("id != ?", user.id) }
+
+  # OPTIMIZE: 
+  def marked_users
+    marked_user_ids = self.marks.pluck(:marked_user_id)
+    User.find(marked_user_ids)
+  end
 
   class << self
   	def authorize_by(params)

@@ -10,9 +10,8 @@ Rails.application.routes.draw do
     get 'welcome/index'
   end
 
-  #resources :users
-
   #resources :authentications
+  resources :marks, only: [:index, :create, :destroy]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
