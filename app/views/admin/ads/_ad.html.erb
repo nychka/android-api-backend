@@ -1,12 +1,5 @@
 <div class="ad-wrapper">
-  <div class="controls">
-    <%= link_to '', edit_admin_ad_path(ad), class: 'glyphicon glyphicon-edit edit control-item' %>
-    <%= link_to '', [:admin, ad], method: :delete, data: { confirm: 'Are you sure?' }, class: 'glyphicon glyphicon-remove control-item delete pull-right' %>
-  </div>
-  <div class="ad">
-    <%= image_tag(ad.photo, class: 'undercover') %>
-  </div>
-  <%= link_to  [:admin, ad] do %>
-    <div class="title"><%=  ad.name %></div>
-  <% end %>
+  <%= render 'shared/item_controls', { edit_item_path: edit_admin_ad_path(ad), item: ad } %>
+  <%= render 'shared/item_undercover', { undercover: ad.photo } %>
+  <%= render 'shared/item_title', { item: ad, title: ad.name } %>
 </div>
