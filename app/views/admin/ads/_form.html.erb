@@ -1,64 +1,36 @@
-<%= form_for([:admin, @ad]) do |f| %>
-  <% if @ad.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@ad.errors.count, "error") %> prohibited this admin_ad from being saved:</h2>
+<%= simple_form_for([:admin, @ad], html: { class: 'form-horizontal' }) do |f| %>
+  <%= render 'shared/error_messages', item: @ad %>
+  <%= render 'shared/error_messages', item: @place %>
 
-      <ul>
-      <% @ad.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+  <div class="form-inputs">
+    <%= f.input :name, input_html: { class: 'form-control' }, placeholder: 'Капучіно' %>
+  </div>
+  <div class="form-inputs">
+    <%= f.input :price, input_html: { class: 'form-control' }, placeholder: '18грн.' %>
+  </div>
+  <div class="form-inputs">
+    <%= f.input :photo, input_html: { class: 'form-control', width: '400px' }, placeholder: 'http://example.com/image.png' %>
+  </div>
+  <div class="form-inputs">
+    <%= f.input :place_id, as: :hidden %>
+  </div>
+  <%= simple_fields_for :place do |b| %>
+    <div class="form-inputs">
+      <%= b.input :name, as: :autocomplete, url: autocomplete_place_name_admin_places_path,
+       id_element: '#ad_place_id', update_elements: { phone: '#place_phone', latitude: '#place_latitude', longitude: '#place_longitude' }, input_html: { class: 'form-control' }, label: 'Place (start typying for autocompletion)', placeholder: 'Японахата' %>
+    </div>
+    <div class="form-inputs">
+      <%= b.input :phone, input_html: { class: 'extra_place_element form-control' }, placeholder: '0329876543' %>
+    </div>
+    <div class="form-inputs">
+      <%= b.input :latitude, input_html: { class: 'extra_place_element form-control' } %>
+    </div>
+    <div class="form-inputs">
+      <%= b.input :longitude, input_html: { class: 'extra_place_element form-control' } %>
     </div>
   <% end %>
-  <% if @place and @place.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@place.errors.count, "error") %> prohibited this admin_place from being saved:</h2>
-
-      <ul>
-      <% @place.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :product_name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :price %><br>
-    <%= f.text_field :price %>
-  </div>
-  <div class="field">
-    <%= f.label :photo %><br>
-    <%= f.text_field :photo %>
-  </div>
-  <div class="field">
-    <%= f.hidden_field :place_id %>
-  </div>
-  <%= fields_for :place do |b| %>
-    <div class="field">
-      <%= b.label :place %><br>
-      <%= b.autocomplete_field :name, autocomplete_place_name_admin_places_path,
-       id_element: '#ad_place_id', update_elements: { phone: '#place_phone', latitude: '#place_latitude', longitude: '#place_longitude' },
-       "data-autocomplete-label" => "Place doesn't exist - create one" %>
-    </div>
-    <div class="field">
-      <%= b.label :phone %><br>
-      <%= b.text_field :phone, class: 'extra_place_element' %>
-    </div>
-    <div class="field">
-      <%= b.label :latitude %><br>
-      <%= b.text_field :latitude, class: 'extra_place_element' %>
-    </div>
-    <div class="field">
-      <%= b.label :longitude %><br>
-      <%= b.text_field :longitude, class: 'extra_place_element' %>
-    </div>
-  <% end %>
-  
-  <div class="actions">
-    <%= f.submit %>
+  <br /><br />
+  <div class="form-inputs">
+    <%= f.button :submit, class: 'btn btn-primary form-control' %>
   </div>
 <% end %>

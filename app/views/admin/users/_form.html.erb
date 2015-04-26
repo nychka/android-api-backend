@@ -1,66 +1,44 @@
-<%= form_for([:admin, @user]) do |f| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this admin_user from being saved:</h2>
+<%= simple_form_for([:admin, @user], html: { class: 'form-horizontal' }) do |f| %>
+  <%= render 'shared/error_messages', item: @user %>
 
-      <ul>
-      <% @user.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :first_name %><br>
-    <%= f.text_field :first_name %>
+  <div class="form-inputs">
+    <%= f.input :first_name, input_html: { class: 'form-control' } %>
   </div>
-  <div class="field">
-    <%= f.label :last_name %><br>
-    <%= f.text_field :last_name %>
+  <div class="form-inputs">
+    <%= f.input :last_name, input_html: { class: 'form-control' } %>
   </div>
-  <div class="field">
-    <%= f.label :city %><br>
-    <%= f.text_field :city %>
+  <div class="form-inputs">
+    <%= f.input :city, input_html: { class: 'form-control' } %>
   </div>
-  <div class="field">
-    <%= f.label :email %><br>
-    <%= f.text_field :email %>
+  <div class="form-inputs">
+    <%= f.input :email, input_html: { class: 'form-control' } %>
   </div>
-  <div class="field">
-    <%= f.label :photo %><br>
-    <%= f.text_field :photo %>
+  <div class="form-inputs">
+    <%= f.input :photo, input_html: { class: 'form-control' } %>
   </div>
-  <div class="field">
-    <%= f.label :gender %><br>
-    <%= f.text_field :gender %>
+  <div class="form-inputs">
+    <%= f.input :gender, input_html: { class: 'form-control' } %>
   </div>
-  <div class="field">
-    <%= f.label :links %><br>
-    <%= f.text_field :links %>
+  <div class="form-inputs">
+    <%= f.input :links, input_html: { class: 'form-control' } %>
   </div>
-  <div class="field">
-    <%= f.label :phone %><br>
-    <%= f.text_field :phone %>
+  <div class="form-inputs">
+    <%= f.input :phone, input_html: { class: 'form-control' } %>
   </div>
-  <div class="field">
-    <%= f.label :age %><br>
-    <%= f.text_field :age %>
+  <div class="form-inputs">
+    <%= f.input :age, input_html: { class: 'form-control' } %>
   </div>
-  <div class="field">
-    <%= f.label :bdate %><br>
-    <%= f.text_field :bdate %>
+  <div class="form-inputs form-inline">
+    <%= f.input :bdate, input_html: { class: 'form-control' } %>
   </div>
-  <div class="field">
-    <%= f.label :longitude %><br>
-    <%= f.text_field :longitude %>
+  <div class="form-inputs">
+    <%= f.input :longitude, input_html: { class: 'form-control' } %>
   </div>
-  <div class="field">
-    <%= f.label :latitude %><br>
-    <%= f.text_field :latitude %>
+  <div class="form-inputs">
+    <%= f.input :latitude, input_html: { class: 'form-control' } %>
   </div>
-
-  <div class="actions">
-    <%= f.submit %>
+  <br /><br />
+  <div class="form-inputs">
+    <%= f.button :submit, class: 'btn btn-primary form-control' %>
   </div>
 <% end %>
