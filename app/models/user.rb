@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
 
   after_create :generate_access_token!
 
+  self.per_page = 10
   geocoded_by :city
   before_create    :geocode, :unless => lambda{ |user| user.city.blank? }
   after_validation :geocode, :if => lambda{ |user| user.persisted? and user.city_changed? }

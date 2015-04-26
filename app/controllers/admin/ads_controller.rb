@@ -5,7 +5,7 @@ class Admin::AdsController < ApplicationController
 
   # GET /admin/ads
   def index
-    @ads = Ad.all
+    @ads = Ad.all.paginate(page: params[:page])
   end
 
   # GET /admin/ads/1

@@ -1,0 +1,5 @@
+<% unless items.nil? and items.empty? %>
+<div class='pagination_panel'>
+  <%= will_paginate items, renderer: BootstrapPagination::Rails %>
+</div>
+<% end %>
