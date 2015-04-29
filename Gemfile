@@ -23,6 +23,7 @@ gem 'will_paginate-bootstrap'
 gem 'rdiscount'
 gem 'rails4-autocomplete'
 gem 'geocoder'
+gem 'newrelic_rpm'
 
 group :test, :development do
   gem 'better_errors'
