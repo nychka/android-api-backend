@@ -1,4 +1,7 @@
-## 0.1.5 / Unrealesed
+## 0.1.5 / 16.05.2015
+### API
+- add MAC field for user
+- add route GET /users/:mac_address
 
 ## 0.1.4 / 25.04.2015
 ### API

@@ -56,7 +56,8 @@ class UsersController < ApiController
     authorize! settings
   end
   def set_user
-    @user = User.find(params[:id]) rescue nil
+    mac_pattern, id = /(\w{2}:){5}\w{2}/, params[:id]
+    @user = (params[:id] =~ mac_pattern) ? User.find_by(mac_address: id) : User.find_by(id: id)
   end
   def user_params
     params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate, :longitude, :latitude, :phone, :links => [])

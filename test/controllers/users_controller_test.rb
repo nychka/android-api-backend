@@ -30,6 +30,16 @@ class UsersControllerTest < ActionController::TestCase
   	assert_equal 200, body[:status]
   	assert_equal susana_json, body[:data][:user]
   end
+  test "GET /users/:mac_address" do
+    jack = create(:user)
+    susana = create(:user, first_name: 'Susana')
+    susana_json = rabl_render(susana, 'users/guest_user')
+    get :show, { access_token: jack.access_token, id: susana.mac_address }
+    assert_response 200
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    assert_equal susana_json, body[:data][:user]
+  end
 	test "POST /users" do
 		user_params = attributes_for(:social_user)
 		post :create, { provider: 'facebook', auth_token: Settings.facebook.access_token, user: user_params }
