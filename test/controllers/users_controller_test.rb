@@ -38,6 +38,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response 200
     body = JSON.parse(response.body).deep_symbolize_keys
     assert_equal 200, body[:status]
+    assert_equal susana.mac_address, body[:data][:user][:mac_address]
     assert_equal susana_json, body[:data][:user]
   end
 	test "POST /users" do
@@ -105,6 +106,14 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal 422, body[:status]
     assert_equal 1, body[:data][:errors].count
     assert_equal "is not included in the list", body[:data][:errors][:gender].join
+  end
+  test "update mac_address" do
+    user = create(:user)
+    user_params = { mac_address: "ec:c2:94:22:8a:96" }
+    put :update, { access_token: user.access_token, user: user_params }
+    body = JSON.parse(response.body).deep_symbolize_keys
+    assert_equal 200, body[:status]
+    assert_equal user_params[:mac_address], body[:data][:user][:mac_address]
   end
 	test "user not found" do
   	jack = create(:user)

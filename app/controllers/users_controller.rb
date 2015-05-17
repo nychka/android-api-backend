@@ -60,7 +60,7 @@ class UsersController < ApiController
     @user = (params[:id] =~ mac_pattern) ? User.find_by(mac_address: id) : User.find_by(id: id)
   end
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate, :longitude, :latitude, :phone, :links => [])
+    params.require(:user).permit(:first_name, :last_name, :email, :age, :gender, :city, :photo, :bdate, :longitude, :latitude, :phone, :mac_address, :links => [])
   end
   def authentication_params
     { provider: params[:provider], auth_token: params[:auth_token] }
